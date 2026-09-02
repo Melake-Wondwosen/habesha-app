@@ -553,7 +553,7 @@ const NO_WIN_COLOR = { bg: HABESHA.inkDeep, fg: "#E9A9AE" };
       />
 
       <div className="absolute inset-x-0 top-0 z-20 pointer-events-none opacity-80">
-        <TibebBand height={17} />
+        <TibebBand height={28} />
       </div>
 
       <div className="relative z-10 flex flex-col h-full w-full">

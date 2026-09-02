@@ -141,7 +141,7 @@ export default function CampaignSetupPage() {
         }}
       />
       <div className="absolute inset-x-0 top-0 z-20 pointer-events-none opacity-85">
-        <TibebBand height={17} />
+        <TibebBand height={28} />
       </div>
 
       {/* Header */}

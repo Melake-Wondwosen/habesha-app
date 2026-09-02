@@ -63,7 +63,7 @@ function HeadlineStat({ label, value, sub }) {
         </p>
       )}
       <div className="w-24 mx-auto mt-4">
-        <TibebBand height={13} tiles={7} ground={HABESHA.amber} line={HABESHA.bronze} />
+        <TibebBand height={22} tiles={7} ground={HABESHA.amber} line={HABESHA.bronze} />
       </div>
     </div>
   );

@@ -126,7 +126,7 @@ export default function WinnerRegistrationPage() {
         }}
       />
       <div className="absolute inset-x-0 top-0 z-20 pointer-events-none opacity-85">
-        <TibebBand height={17} />
+        <TibebBand height={28} />
       </div>
 
       {/* Header — the prize is the headline */}
@@ -162,7 +162,7 @@ export default function WinnerRegistrationPage() {
           {fillTemplate(winMessage, prize || "a prize")}
         </h1>
         <div className="w-32 mt-4">
-          <TibebBand height={16} tiles={8} ground={HABESHA.amber} line={HABESHA.bronze} />
+          <TibebBand height={24} tiles={8} ground={HABESHA.amber} line={HABESHA.bronze} />
         </div>
       </div>
 

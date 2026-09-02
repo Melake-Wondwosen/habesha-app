@@ -1,6 +1,7 @@
 import { useId } from "react";
 import habeshaMark from "../assets/habesha-mark.png";
 import adeyFlower from "../assets/habesha-flower.png";
+import tibebTile from "../assets/habesha-tibeb.png";
 
 export const HABESHA = {
   /* Sampled off the supplied artwork — the sticker field, the tibeb
@@ -38,72 +39,64 @@ export function TibebWash({ opacity = 0.07, className = "", style }) {
 }
 
 /* ------------------------------------------------------------------
-   Tibeb band — the chevron weave from the sticker artwork. The band is a
-   solid cream field with the chevron and triangle motif cut into it
-   in red, which is how the weave is actually drawn in the artwork.
+   Tibeb band — the supplied Habesha pattern: concentric diamonds set
+   in a field of smaller ones. One repeat of the artwork lives in
+   habesha-tibeb.png as an alpha mask, so a single asset can be tinted
+   any colour the screen needs rather than shipping one file per tone.
 
-   ground — the band fill (cream in the source)
-   line   — the cut-out linework (red in the source)
+   ground — fill behind the motif (transparent by default)
+   line   — the motif itself
+   tiles  — force exactly this many whole repeats across the width, so
+            nothing is clipped mid-motif at the edges
    ------------------------------------------------------------------ */
+const TIBEB_RATIO = 195 / 126; /* one repeat of the supplied artwork */
+
 export function TibebBand({
   height = 22,
-  ground = HABESHA.field,
+  ground = "transparent",
   line = HABESHA.gold,
   opacity = 1,
   flip = false,
   tiles = 0,
   className = "",
+  style,
 }) {
-  const id = useId().replace(/:/g, "");
-  const s = height / 43;
-
-  /* With `tiles` set, the band scales so exactly that many whole motifs
-     span the full width — nothing is clipped mid-repeat at the edges.
-     Without it, the motif keeps its natural pixel size and simply
-     repeats, which is what the wide full-bleed trims want. */
-  const fitted = tiles > 0;
+  /* Without `tiles` the motif keeps its own aspect and simply repeats,
+     which is what the wide full-bleed trims want. */
+  const size = tiles > 0
+    ? `${100 / tiles}% 100%`
+    : `${height * TIBEB_RATIO}px ${height}px`;
 
   return (
-    <svg
-      width="100%"
-      height={height}
+    <div
       aria-hidden="true"
       className={className}
-      viewBox={fitted ? `0 0 ${44 * tiles} 43` : undefined}
-      preserveAspectRatio={fitted ? "none" : undefined}
       style={{
+        height,
+        width: "100%",
         opacity,
+        background: ground,
         display: "block",
         transform: flip ? "scaleY(-1)" : undefined,
+        ...style,
       }}
     >
-      <defs>
-        <pattern
-          id={`tb-${id}`}
-          width={fitted ? 44 : 44 * s}
-          height={fitted ? 43 : height}
-          patternUnits="userSpaceOnUse"
-        >
-          <g transform={fitted ? undefined : `scale(${s})`}>
-            <rect width="44" height="43" fill={ground} />
-            <g
-              fill="none"
-              stroke={line}
-              strokeWidth="2.6"
-              strokeLinejoin="miter"
-              strokeMiterlimit="10"
-            >
-              <path d="M-22 21 L0 1 L22 21 L44 1 L66 21" />
-              <path d="M-22 26.5 L0 6.5 L22 26.5 L44 6.5 L66 26.5" />
-              <path d="M11 4.5 L33 4.5 L22 17 Z" />
-              <path d="M-12 41 L0 25 L12 41 Z" />
-              <path d="M32 41 L44 25 L56 41 Z" />
-            </g>
-          </g>
-        </pattern>
-      </defs>
-      <rect width="100%" height="100%" fill={`url(#tb-${id})`} />
-    </svg>
+      <div
+        style={{
+          height: "100%",
+          width: "100%",
+          backgroundColor: line,
+          maskImage: `url(${tibebTile})`,
+          WebkitMaskImage: `url(${tibebTile})`,
+          maskRepeat: "repeat-x",
+          WebkitMaskRepeat: "repeat-x",
+          maskSize: size,
+          WebkitMaskSize: size,
+          maskPosition: "center",
+          WebkitMaskPosition: "center",
+        }}
+      />
+    </div>
   );
 }
 
@@ -247,7 +240,7 @@ export function Screen({ children, rays = true, trim = true, fullWidth = false }
 
       {trim && (
         <div className="absolute inset-x-0 top-0 z-20 pointer-events-none">
-          <TibebBand height={17} />
+          <TibebBand height={28} />
         </div>
       )}
 
@@ -255,7 +248,7 @@ export function Screen({ children, rays = true, trim = true, fullWidth = false }
 
       {trim && (
         <div className="absolute inset-x-0 bottom-0 z-20 pointer-events-none">
-          <TibebBand height={17} flip />
+          <TibebBand height={28} flip />
         </div>
       )}
     </div>

@@ -66,7 +66,7 @@ export default function LoginPage() {
             style={{ background: HABESHA.cream, color: HABESHA.ink }}
           >
             <div className="-mx-6 -mt-5 mb-5 overflow-hidden rounded-t-[18px]">
-              <TibebBand height={20} ground={HABESHA.field} line={HABESHA.cream} />
+              <TibebBand height={30} ground={HABESHA.field} line={HABESHA.cream} />
             </div>
 
             {/* Username */}
