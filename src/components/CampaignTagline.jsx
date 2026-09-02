@@ -22,7 +22,7 @@ export default function CampaignTagline({ className = "", style }) {
       src={tagline.src}
       alt={tagline.text || "የሚያረካ"}
       onLoad={() => setShown(true)}
-      className={`w-full h-auto select-none pointer-events-none ${className}`}
+      className={`block w-full h-auto select-none pointer-events-none ${className}`}
       style={{
         opacity: shown ? 1 : 0,
         transform: shown ? "none" : "translateY(6px)",

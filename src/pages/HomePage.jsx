@@ -92,7 +92,7 @@ export default function HomePage() {
             now — the heading it used to sit under is gone, so it reads
             as the greeting rather than as decoration beneath one. */}
         <div className="mb-5 -mt-3">
-          <CampaignTagline style={{ maxWidth: "17rem" }} />
+          <CampaignTagline className="mx-auto" style={{ maxWidth: "17rem" }} />
         </div>
 
         {!isAdmin(user) && <SectionLabel>My outlets</SectionLabel>}
