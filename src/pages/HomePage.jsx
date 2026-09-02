@@ -73,7 +73,7 @@ export default function HomePage() {
     <Screen>
       <div className="flex flex-col flex-1 px-5 pt-8 pb-8">
         {/* Header */}
-        <div className="flex justify-between items-center mb-7">
+        <div className="flex justify-between items-center mb-4">
           <HabeshaMark className="w-14 drop-shadow-[0_6px_14px_rgba(0,0,0,0.4)]" />
           <div className="text-right">
             <p className="habesha-eyebrow" style={{ color: `${HABESHA.cream}99` }}>
@@ -88,18 +88,11 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Greeting */}
-        <div className="mb-6">
-          <h1
-            className="habesha-display text-3xl whitespace-nowrap"
-            style={{ color: HABESHA.cream, textShadow: `3px 3px 0 ${HABESHA.ink}` }}
-          >
-            Welcome back
-          </h1>
-          {/* A different campaign line every sign-in. Held tight to the
-              heading — the artwork carries its own generous margins, so
-              anything more than a hair here reads as a gap. */}
-          <CampaignTagline className="-mt-1" style={{ maxWidth: "17rem" }} />
+        {/* A different campaign line every sign-in. It stands on its own
+            now — the heading it used to sit under is gone, so it reads
+            as the greeting rather than as decoration beneath one. */}
+        <div className="mb-5 -mt-3">
+          <CampaignTagline style={{ maxWidth: "17rem" }} />
         </div>
 
         {!isAdmin(user) && <SectionLabel>My outlets</SectionLabel>}
