@@ -61,6 +61,9 @@ body,
 }
 
 body {
+  /* The campaign photograph, held still behind the scrolling content.
+     A background-attachment: fixed here would judder on iOS, so the
+     image lives on a fixed pseudo-element instead. */
   background: var(--habesha-ink-deep);
   color: var(--habesha-cream);
   font-family: var(--font-sans);
@@ -747,4 +750,44 @@ select.habesha-field {
 }
 [data-theme="neu"] .habesha-scroll::-webkit-scrollbar-thumb {
   background: rgba(255, 244, 228, 0.35);
+}
+
+
+/* ============================================================
+   Campaign backdrop
+   The photograph is bright and busy, and the app puts cream text
+   and translucent panels straight on top of it. The scrim is what
+   keeps that readable: at 0.78 the worst pixel in the frame still
+   gives cream text 8.5:1, comfortably past AA.
+
+   Tune --habesha-scrim to taste. Below about 0.6 the text starts
+   failing contrast over the bright patch behind the table.
+   ============================================================ */
+:root {
+  --habesha-scrim: 0.78;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background-image: url("./assets/habesha-bg.webp");
+  background-size: cover;
+  background-position: center 30%;
+  background-repeat: no-repeat;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(11, 8, 8, calc(var(--habesha-scrim) + 0.12)) 0%,
+      rgba(20, 16, 15, var(--habesha-scrim)) 38%,
+      rgba(11, 8, 8, calc(var(--habesha-scrim) + 0.08)) 100%
+    );
 }

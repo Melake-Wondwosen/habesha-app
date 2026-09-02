@@ -219,7 +219,10 @@ export function Screen({ children, rays = true, trim = true, fullWidth = false }
     <div
       className={`habesha-screen relative min-h-screen ${fullWidth ? "" : "max-w-md"} mx-auto overflow-hidden flex flex-col`}
       style={{
-        background: `radial-gradient(130% 90% at 50% 0%, ${HABESHA.field} 0%, ${HABESHA.ink} 58%, ${HABESHA.inkDeep} 100%)`,
+        /* Transparent apart from a soft vignette — the campaign
+           photograph and its scrim live on the body, behind this. */
+        background:
+          "radial-gradient(120% 80% at 50% 0%, rgba(35,31,32,0.35) 0%, rgba(11,8,8,0.55) 100%)",
       }}
     >
       {rays && (
