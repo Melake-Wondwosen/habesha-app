@@ -1,7 +1,7 @@
 import { API_URL } from "../config";
 
-const CACHE_KEY = "feta_prize_list";
-const CACHE_TIME_KEY = "feta_prize_list_saved_at";
+const CACHE_KEY = "habesha_prize_list";
+const CACHE_TIME_KEY = "habesha_prize_list_saved_at";
 
 /* A list to fall back on if the sheet has never been filled in and the
    phone has no cached copy yet. Matches what the app shipped with. */

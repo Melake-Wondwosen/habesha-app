@@ -1,6 +1,6 @@
 import { API_URL } from "../config";
 
-const CACHE_KEY = "feta_settings";
+const CACHE_KEY = "habesha_settings";
 
 const DEFAULT_WIN_MESSAGE = "Congratulations! You've won {prize} 🎉";
 

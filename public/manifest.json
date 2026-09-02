@@ -1,12 +1,12 @@
 {
-  "name": "Habesha Wheel \u2014 Outlet Activation",
+  "name": "Habesha Wheel — Outlet Activation",
   "short_name": "Habesha Wheel",
   "description": "Set up an outlet campaign, spin the Habesha wheel, and register winners on the spot.",
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#480A0E",
-  "theme_color": "#B4222C",
+  "background_color": "#0B0808",
+  "theme_color": "#14100F",
   "icons": [
     {
       "src": "/icon-192.png",

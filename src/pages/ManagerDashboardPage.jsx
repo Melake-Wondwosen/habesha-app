@@ -2,12 +2,12 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import {
-  FETA,
-  FetaMark,
+  HABESHA,
+  HabeshaMark,
   Screen,
   SectionLabel,
   TibebBand,
-} from "../brand/FetaBrand";
+} from "../brand/HabeshaBrand";
 import { getManagerStats } from "../services/statsService";
 import PageHeader from "../components/PageHeader";
 import { buildPresets, weeksOfMonth, describeRange } from "../services/dateRanges";
@@ -45,25 +45,25 @@ function HeadlineStat({ label, value, sub }) {
   const shown = useCountUp(value);
   return (
     <div
-      className="feta-lockup px-6 py-7 text-center"
-      style={{ background: FETA.cream, color: FETA.ink }}
+      className="habesha-lockup px-6 py-7 text-center"
+      style={{ background: HABESHA.cream, color: HABESHA.ink }}
     >
-      <p className="feta-eyebrow" style={{ color: FETA.redDeep }}>
+      <p className="habesha-eyebrow" style={{ color: HABESHA.bronze }}>
         {label}
       </p>
       <p
-        className="feta-display mt-2"
-        style={{ fontSize: 60, lineHeight: 0.9, textShadow: `3px 3px 0 ${FETA.gold}` }}
+        className="habesha-display mt-2"
+        style={{ fontSize: 60, lineHeight: 0.9, textShadow: `3px 3px 0 ${HABESHA.gold}` }}
       >
         {shown.toLocaleString()}
       </p>
       {sub && (
-        <p className="text-xs font-bold mt-3" style={{ color: `${FETA.ink}99` }}>
+        <p className="text-xs font-bold mt-3" style={{ color: `${HABESHA.ink}99` }}>
           {sub}
         </p>
       )}
       <div className="w-24 mx-auto mt-4">
-        <TibebBand height={13} tiles={7} ground={FETA.amber} line={FETA.redDeep} />
+        <TibebBand height={13} tiles={7} ground={HABESHA.amber} line={HABESHA.bronze} />
       </div>
     </div>
   );
@@ -73,23 +73,23 @@ function StatCard({ label, value, sub, accent, star }) {
   const shown = useCountUp(value);
   return (
     <div
-      className="feta-lockup-flat px-4 py-5"
-      style={{ background: FETA.cream, color: FETA.ink }}
+      className="habesha-lockup-flat px-4 py-5"
+      style={{ background: HABESHA.cream, color: HABESHA.ink }}
     >
       <div className="flex items-start justify-between gap-2">
-        <p className="feta-eyebrow" style={{ color: FETA.redDeep }}>
+        <p className="habesha-eyebrow" style={{ color: HABESHA.bronze }}>
           {label}
         </p>
         {star && <span style={{ color: accent, fontSize: 13 }}>★</span>}
       </div>
       <p
-        className="feta-display mt-2"
-        style={{ fontSize: 34, lineHeight: 1, color: accent || FETA.ink }}
+        className="habesha-display mt-2"
+        style={{ fontSize: 34, lineHeight: 1, color: accent || HABESHA.ink }}
       >
         {shown.toLocaleString()}
       </p>
       {sub && (
-        <p className="text-xs font-semibold mt-1.5" style={{ color: `${FETA.ink}88` }}>
+        <p className="text-xs font-semibold mt-1.5" style={{ color: `${HABESHA.ink}88` }}>
           {sub}
         </p>
       )}
@@ -154,15 +154,15 @@ export default function ManagerDashboardPage({ national = false }) {
           />
         ) : (
           <div className="flex items-center gap-3 mb-5">
-            <FetaMark className="w-12 flex-none" />
+            <HabeshaMark className="w-12 flex-none" />
             <div className="min-w-0 flex-1">
               <h1
-                className="feta-display text-2xl"
-                style={{ color: FETA.cream, textShadow: `3px 3px 0 ${FETA.ink}` }}
+                className="habesha-display text-2xl"
+                style={{ color: HABESHA.cream, textShadow: `3px 3px 0 ${HABESHA.ink}` }}
               >
                 {stats?.region || "Region"}
               </h1>
-              <p className="text-xs font-bold mt-1 truncate" style={{ color: FETA.amber }}>
+              <p className="text-xs font-bold mt-1 truncate" style={{ color: HABESHA.amber }}>
                 {user?.name || user?.username} · Trade marketing
               </p>
             </div>
@@ -173,7 +173,7 @@ export default function ManagerDashboardPage({ national = false }) {
             week of this month. Choosing from either replaces the other. */}
         <div className="mb-5 flex gap-3">
           <div className="flex-1 min-w-0">
-            <label className="feta-eyebrow block mb-1.5" style={{ color: FETA.amber }}>
+            <label className="habesha-eyebrow block mb-1.5" style={{ color: HABESHA.amber }}>
               Date
             </label>
             <select
@@ -182,7 +182,7 @@ export default function ManagerDashboardPage({ national = false }) {
                 const p = presets.find((x) => x.key === e.target.value);
                 if (p) setRange(p);
               }}
-              className="feta-field !py-2.5 !text-sm"
+              className="habesha-field !py-2.5 !text-sm"
             >
               {!presets.some((p) => p.key === range.key) && (
                 <option value="">{range.label}</option>
@@ -196,7 +196,7 @@ export default function ManagerDashboardPage({ national = false }) {
           </div>
 
           <div className="flex-1 min-w-0">
-            <label className="feta-eyebrow block mb-1.5" style={{ color: FETA.amber }}>
+            <label className="habesha-eyebrow block mb-1.5" style={{ color: HABESHA.amber }}>
               Week
             </label>
             <select
@@ -205,7 +205,7 @@ export default function ManagerDashboardPage({ national = false }) {
                 const w = weeks.find((x) => x.key === e.target.value);
                 if (w) setRange(w);
               }}
-              className="feta-field !py-2.5 !text-sm"
+              className="habesha-field !py-2.5 !text-sm"
             >
               <option value="">Choose a week</option>
               {weeks.map((w) => (
@@ -219,7 +219,7 @@ export default function ManagerDashboardPage({ national = false }) {
 
         <p
           className="text-xs font-bold mb-5 text-center"
-          style={{ color: FETA.amber }}
+          style={{ color: HABESHA.amber }}
         >
           Showing {describeRange(range.from, range.to)}
           {loading && stats ? " · updating…" : ""}
@@ -228,7 +228,7 @@ export default function ManagerDashboardPage({ national = false }) {
         {loading && !stats && (
           <p
             className="text-center py-10 text-sm font-semibold"
-            style={{ color: `${FETA.cream}AA` }}
+            style={{ color: `${HABESHA.cream}AA` }}
           >
             Pulling the latest figures…
           </p>
@@ -237,8 +237,8 @@ export default function ManagerDashboardPage({ national = false }) {
         {error && (
           <div
             role="alert"
-            className="feta-lockup-flat px-4 py-3 mb-5 text-sm font-semibold"
-            style={{ background: FETA.ink, color: FETA.amber }}
+            className="habesha-lockup-flat px-4 py-3 mb-5 text-sm font-semibold"
+            style={{ background: HABESHA.ink, color: HABESHA.amber }}
           >
             {error}
           </div>
@@ -248,27 +248,27 @@ export default function ManagerDashboardPage({ national = false }) {
           <>
             {/* Live BAs — always "right now", never filtered by date */}
             <div
-              className="feta-lockup px-5 py-4 mb-5 flex items-center gap-4"
-              style={{ background: FETA.ink, color: FETA.cream }}
+              className="habesha-lockup px-5 py-4 mb-5 flex items-center gap-4"
+              style={{ background: HABESHA.ink, color: HABESHA.cream }}
             >
               <span className="relative flex h-3 w-3 flex-none">
                 {stats.liveBAs > 0 && (
                   <span
                     className="absolute inline-flex h-full w-full rounded-full animate-ping"
-                    style={{ background: FETA.amber, opacity: 0.75 }}
+                    style={{ background: HABESHA.amber, opacity: 0.75 }}
                   />
                 )}
                 <span
                   className="relative inline-flex rounded-full h-3 w-3"
-                  style={{ background: stats.liveBAs > 0 ? FETA.amber : FETA.silver }}
+                  style={{ background: stats.liveBAs > 0 ? HABESHA.amber : HABESHA.silver }}
                 />
               </span>
 
               <div className="flex-1 min-w-0">
-                <p className="feta-eyebrow" style={{ color: FETA.amber }}>
+                <p className="habesha-eyebrow" style={{ color: HABESHA.amber }}>
                   Live right now
                 </p>
-                <p className="feta-display text-xl mt-0.5">
+                <p className="habesha-display text-xl mt-0.5">
                   {stats.liveBAs} of {stats.totalBAs} BAs
                 </p>
               </div>
@@ -276,7 +276,7 @@ export default function ManagerDashboardPage({ national = false }) {
               {stats.liveBAList?.length > 0 && (
                 <p
                   className="text-[11px] font-semibold text-right flex-none max-w-[38%] truncate"
-                  style={{ color: `${FETA.cream}99` }}
+                  style={{ color: `${HABESHA.cream}99` }}
                 >
                   {stats.liveBAList.map((b) => b.name).join(", ")}
                 </p>
@@ -298,14 +298,14 @@ export default function ManagerDashboardPage({ national = false }) {
                   label="Main prizes"
                   value={stats.mainPrizeWins}
                   sub={`${(stats.mainPrizeWinsAllTime || 0).toLocaleString()} all time`}
-                  accent={FETA.red}
+                  accent={HABESHA.field}
                   star
                 />
                 <StatCard
                   label="Regular prizes"
                   value={stats.regularPrizeWins}
                   sub={`${(stats.regularPrizeWinsAllTime || 0).toLocaleString()} all time`}
-                  accent={FETA.redDeep}
+                  accent={HABESHA.bronze}
                 />
               </div>
             </div>
@@ -327,20 +327,20 @@ export default function ManagerDashboardPage({ national = false }) {
               <div className="mt-5">
                 <SectionLabel>By brand ambassador</SectionLabel>
                 <div
-                  className="feta-lockup-flat overflow-hidden"
-                  style={{ background: FETA.cream, color: FETA.ink }}
+                  className="habesha-lockup-flat overflow-hidden"
+                  style={{ background: HABESHA.cream, color: HABESHA.ink }}
                 >
                   {stats.baBreakdown.map((b, i) => (
                     <div
                       key={b.id || i}
                       className="flex items-center gap-3 px-4 py-3"
                       style={{
-                        borderTop: i === 0 ? "none" : `1.5px solid ${FETA.ink}12`,
+                        borderTop: i === 0 ? "none" : `1.5px solid ${HABESHA.ink}12`,
                       }}
                     >
                       <span
-                        className="feta-display flex-none w-6 text-center"
-                        style={{ color: `${FETA.ink}55`, fontSize: 13 }}
+                        className="habesha-display flex-none w-6 text-center"
+                        style={{ color: `${HABESHA.ink}55`, fontSize: 13 }}
                       >
                         {i + 1}
                       </span>
@@ -348,8 +348,8 @@ export default function ManagerDashboardPage({ national = false }) {
                         {b.name}
                       </span>
                       <span
-                        className="feta-eyebrow flex-none"
-                        style={{ color: FETA.redDeep }}
+                        className="habesha-eyebrow flex-none"
+                        style={{ color: HABESHA.bronze }}
                       >
                         {b.reached} reached · {b.wins} won
                       </span>
@@ -362,7 +362,7 @@ export default function ManagerDashboardPage({ national = false }) {
             {stats.peopleReached === 0 && (
               <p
                 className="text-xs font-semibold text-center mt-5"
-                style={{ color: `${FETA.cream}99` }}
+                style={{ color: `${HABESHA.cream}99` }}
               >
                 No activity recorded in this period.
               </p>
@@ -371,7 +371,7 @@ export default function ManagerDashboardPage({ national = false }) {
             {updatedAt && (
               <p
                 className="text-xs font-semibold text-center mt-6"
-                style={{ color: `${FETA.cream}80` }}
+                style={{ color: `${HABESHA.cream}80` }}
               >
                 Updated {updatedAt.toLocaleTimeString()} · refreshes every minute
               </p>
@@ -385,8 +385,8 @@ export default function ManagerDashboardPage({ national = false }) {
             logout();
             navigate("/login");
           }}
-          className="w-full mt-8 py-2 feta-eyebrow"
-          style={{ color: `${FETA.cream}AA` }}
+          className="w-full mt-8 py-2 habesha-eyebrow"
+          style={{ color: `${HABESHA.cream}AA` }}
         >
           Sign out
         </button>

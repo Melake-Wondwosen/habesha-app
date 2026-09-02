@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import { FETA, FetaButton, Screen, SectionLabel } from "../brand/FetaBrand";
+import { HABESHA, HabeshaButton, Screen, SectionLabel } from "../brand/HabeshaBrand";
 import PageHeader from "../components/PageHeader";
 import { getSettings, saveSettings } from "../services/settingsService";
 import { THEMES, applyTheme, cachedTheme } from "../theme/useTheme";
@@ -80,8 +80,8 @@ export default function AdminThemePage() {
 
         {notice && (
           <div
-            className="feta-lockup-flat px-4 py-3 mb-4 text-sm font-semibold"
-            style={{ background: FETA.amber, color: FETA.ink }}
+            className="habesha-lockup-flat px-4 py-3 mb-4 text-sm font-semibold"
+            style={{ background: HABESHA.amber, color: HABESHA.ink }}
           >
             {notice}
           </div>
@@ -90,8 +90,8 @@ export default function AdminThemePage() {
         {error && (
           <div
             role="alert"
-            className="feta-lockup-flat px-4 py-3 mb-4 text-sm font-semibold"
-            style={{ background: FETA.ink, color: FETA.amber }}
+            className="habesha-lockup-flat px-4 py-3 mb-4 text-sm font-semibold"
+            style={{ background: HABESHA.ink, color: HABESHA.amber }}
           >
             {error}
           </div>
@@ -100,7 +100,7 @@ export default function AdminThemePage() {
         {loading ? (
           <p
             className="text-center py-10 text-sm font-semibold"
-            style={{ color: `${FETA.cream}AA` }}
+            style={{ color: `${HABESHA.cream}AA` }}
           >
             Loading…
           </p>
@@ -109,7 +109,7 @@ export default function AdminThemePage() {
             <SectionLabel>Choose a look</SectionLabel>
             <p
               className="text-xs font-semibold mb-3"
-              style={{ color: `${FETA.cream}99` }}
+              style={{ color: `${HABESHA.cream}99` }}
             >
               Tap to preview it here first. Nothing changes for anyone else
               until you publish.
@@ -122,30 +122,30 @@ export default function AdminThemePage() {
                   <button
                     key={t.key}
                     onClick={() => preview(t.key)}
-                    className="feta-lockup-sm feta-press w-full p-4 flex items-center gap-4 text-left"
+                    className="habesha-lockup-sm habesha-press w-full p-4 flex items-center gap-4 text-left"
                     style={{
-                      background: on ? FETA.amber : FETA.cream,
-                      color: FETA.ink,
+                      background: on ? HABESHA.amber : HABESHA.cream,
+                      color: HABESHA.ink,
                     }}
                   >
                     <span
-                      className="w-11 h-11 rounded-xl flex items-center justify-center flex-none feta-display"
+                      className="w-11 h-11 rounded-xl flex items-center justify-center flex-none habesha-display"
                       style={{
-                        background: FETA.ink,
-                        color: FETA.amber,
+                        background: HABESHA.ink,
+                        color: HABESHA.amber,
                         fontSize: 17,
                       }}
                     >
                       {on ? "✓" : t.name.charAt(0)}
                     </span>
                     <span className="min-w-0 flex-1">
-                      <span className="feta-display text-sm block">
+                      <span className="habesha-display text-sm block">
                         {t.name}
                         {t.key === published && " · live"}
                       </span>
                       <span
                         className="text-xs font-semibold block mt-0.5"
-                        style={{ color: FETA.redDeep }}
+                        style={{ color: HABESHA.bronze }}
                       >
                         {t.blurb}
                       </span>
@@ -158,8 +158,8 @@ export default function AdminThemePage() {
             {dirty && (
               <button
                 onClick={revert}
-                className="feta-eyebrow w-full mt-3 py-2"
-                style={{ color: `${FETA.cream}AA` }}
+                className="habesha-eyebrow w-full mt-3 py-2"
+                style={{ color: `${HABESHA.cream}AA` }}
               >
                 Undo preview
               </button>
@@ -173,9 +173,9 @@ export default function AdminThemePage() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder={`Confirm as ${user?.username || "you"}`}
                 autoComplete="current-password"
-                className="feta-field mb-4"
+                className="habesha-field mb-4"
               />
-              <FetaButton
+              <HabeshaButton
                 onClick={publish}
                 disabled={saving || !dirty}
                 className="!text-base"
@@ -185,7 +185,7 @@ export default function AdminThemePage() {
                   : dirty
                   ? "Publish this look"
                   : "Already live"}
-              </FetaButton>
+              </HabeshaButton>
             </div>
           </>
         )}

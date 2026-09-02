@@ -4,8 +4,8 @@
   "description": "Habesha Spin Wheel Outlet Activation App",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#B8892F",
+  "background_color": "#0B0808",
+  "theme_color": "#14100F",
   "icons": [
     {
       "src": "/icon-192.png",

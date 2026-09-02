@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
-  FETA,
-  FetaMark,
-  FetaButton,
-  Sunburst,
+  HABESHA,
+  HabeshaMark,
+  HabeshaButton,
+  TibebWash,
   SectionLabel,
   TibebBand,
-} from "../brand/FetaBrand";
+} from "../brand/HabeshaBrand";
 
 import {
   getActivePrizes,
@@ -15,23 +15,8 @@ import {
   FALLBACK_PRIZES,
 } from "../services/prizeService";
 
-import fetaBottle from "../assets/feta-bottle.png";
-import fetaTshirt from "../assets/feta-tshirt.png";
-import fetaCap from "../assets/feta-cap.png";
-import fetaSixPack from "../assets/feta-sixpack.png";
-import fetaKeychain from "../assets/feta-keychain.png";
-import fetaOpener from "../assets/feta-opener.png";
+import PrizeGlyph from "../components/PrizeGlyph";
 
-/* Thumbnail for a prize, when we have real product artwork for it. */
-function prizeImage(name) {
-  if (/6\s*-?\s*pack/i.test(name)) return fetaSixPack;
-  if (isBottlePrize(name)) return fetaBottle;
-  if (/t[\s-]?shirt/i.test(name)) return fetaTshirt;
-  if (/\bcap\b/i.test(name)) return fetaCap;
-  if (/opener/i.test(name)) return fetaKeychain;
-  if (/key\s*-?\s*chain|keyring/i.test(name)) return fetaOpener;
-  return null;
-}
 import {
   BOTTLES_PER_CRATE,
   isBottlePrize,
@@ -140,12 +125,12 @@ export default function CampaignSetupPage() {
     <div
       className="relative h-[100dvh] max-w-md mx-auto overflow-hidden flex flex-col"
       style={{
-        background: `radial-gradient(110% 60% at 50% 0%, ${FETA.red} 0%, ${FETA.redDeep} 55%, ${FETA.redDark} 100%)`,
-        color: FETA.cream,
+        background: `radial-gradient(110% 60% at 50% 0%, ${HABESHA.field} 0%, ${HABESHA.bronze} 55%, ${HABESHA.inkDeep} 100%)`,
+        color: HABESHA.cream,
       }}
     >
-      <Sunburst
-        opacity={0.24}
+      <TibebWash
+        opacity={0.06}
         className="absolute pointer-events-none"
         style={{
           top: "-55%",
@@ -165,11 +150,11 @@ export default function CampaignSetupPage() {
           <button
             onClick={() => navigate("/home")}
             aria-label="Back to outlets"
-            className="feta-press flex-none w-10 h-10 rounded-xl flex items-center justify-center"
+            className="habesha-press flex-none w-10 h-10 rounded-xl flex items-center justify-center"
             style={{
-              background: FETA.cream,
-              color: FETA.ink,
-              boxShadow: `0 0 0 2px ${FETA.gold}, 0 0 0 4px ${FETA.ink}`,
+              background: HABESHA.cream,
+              color: HABESHA.ink,
+              boxShadow: `0 0 0 2px ${HABESHA.gold}, 0 0 0 4px ${HABESHA.ink}`,
               fontSize: 18,
               fontWeight: 900,
               lineHeight: 1,
@@ -177,17 +162,17 @@ export default function CampaignSetupPage() {
           >
             ←
           </button>
-          <FetaMark className="w-10 flex-none" />
+          <HabeshaMark className="w-10 flex-none" />
           <div className="min-w-0">
             <h1
-              className="feta-display text-2xl"
-              style={{ color: FETA.cream, textShadow: `3px 3px 0 ${FETA.ink}` }}
+              className="habesha-display text-2xl"
+              style={{ color: HABESHA.cream, textShadow: `3px 3px 0 ${HABESHA.ink}` }}
             >
               Campaign setup
             </h1>
             <p
               className="text-xs font-bold truncate mt-1"
-              style={{ color: FETA.amber }}
+              style={{ color: HABESHA.amber }}
             >
               {outlet?.name || "Unknown outlet"}
             </p>
@@ -196,14 +181,14 @@ export default function CampaignSetupPage() {
       </div>
 
       {/* Scrolling body */}
-      <div className="feta-scroll relative z-10 flex-1 overflow-y-auto px-6 pb-4 space-y-6">
+      <div className="habesha-scroll relative z-10 flex-1 overflow-y-auto px-6 pb-4 space-y-6">
         {/* Standard prizes */}
         <div>
           <SectionLabel>Trade materials</SectionLabel>
           {catalogueState === "cached" && (
             <p
               className="text-xs font-semibold mb-2.5"
-              style={{ color: `${FETA.cream}AA` }}
+              style={{ color: `${HABESHA.cream}AA` }}
             >
               Offline — showing the last list this phone downloaded.
             </p>
@@ -216,21 +201,19 @@ export default function CampaignSetupPage() {
                 <button
                   key={prize}
                   onClick={() => addPrize(prize, item.qty, item.tier, item.weight)}
-                  className="feta-press py-3 px-2 rounded-xl font-extrabold text-xs"
+                  className="habesha-press py-3 px-2 rounded-xl font-extrabold text-xs"
                   style={{
-                    background: on ? FETA.amber : FETA.cream,
-                    color: FETA.ink,
-                    boxShadow: `0 0 0 2px ${on ? FETA.red : FETA.gold}, 0 0 0 4px ${FETA.ink}`,
+                    background: on ? HABESHA.amber : HABESHA.cream,
+                    color: HABESHA.ink,
+                    boxShadow: `0 0 0 2px ${on ? HABESHA.field : HABESHA.gold}, 0 0 0 4px ${HABESHA.ink}`,
                   }}
                 >
-                  {prizeImage(prize) && (
-                    <img
-                      src={prizeImage(prize)}
-                      alt=""
-                      aria-hidden="true"
-                      className="h-7 w-auto mx-auto mb-1 object-contain"
-                    />
-                  )}
+                  <PrizeGlyph
+                    name={prize}
+                    size={22}
+                    tone={on ? HABESHA.gold : HABESHA.bronze}
+                    className="block mx-auto mb-1"
+                  />
                   {item.tier === "main" ? "★ " : ""}
                   {on ? `✓ ${prize}` : prize}
                 </button>
@@ -244,12 +227,12 @@ export default function CampaignSetupPage() {
           <div>
             <SectionLabel>Beer stock</SectionLabel>
             <div
-              className="feta-lockup-flat p-4"
-              style={{ background: FETA.cream, color: FETA.ink }}
+              className="habesha-lockup-flat p-4"
+              style={{ background: HABESHA.cream, color: HABESHA.ink }}
             >
               <label
-                className="feta-eyebrow block mb-2"
-                style={{ color: FETA.redDeep }}
+                className="habesha-eyebrow block mb-2"
+                style={{ color: HABESHA.bronze }}
               >
                 Crates for this outlet
               </label>
@@ -260,11 +243,11 @@ export default function CampaignSetupPage() {
                 value={crates}
                 onChange={(e) => setCrates(e.target.value)}
                 placeholder="e.g. 5"
-                className="feta-field !py-2.5"
+                className="habesha-field !py-2.5"
               />
               <p
                 className="text-sm font-bold mt-3"
-                style={{ color: bottleTotal > 0 ? FETA.redDeep : `${FETA.ink}77` }}
+                style={{ color: bottleTotal > 0 ? HABESHA.bronze : `${HABESHA.ink}77` }}
               >
                 {bottleTotal > 0
                   ? `${bottleTotal} bottles available (${BOTTLES_PER_CRATE} per crate)`
@@ -272,7 +255,7 @@ export default function CampaignSetupPage() {
               </p>
               <p
                 className="text-xs font-semibold mt-2"
-                style={{ color: `${FETA.ink}88` }}
+                style={{ color: `${HABESHA.ink}88` }}
               >
                 One, two and three bottle wins all come out of this total. A
                 prize drops off the wheel once there aren't enough left.
@@ -290,15 +273,15 @@ export default function CampaignSetupPage() {
               onChange={(e) => setCustomPrize(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && addCustomPrize()}
               placeholder="Name the prize"
-              className="feta-field flex-1 !py-3 !text-sm"
+              className="habesha-field flex-1 !py-3 !text-sm"
             />
             <button
               onClick={addCustomPrize}
-              className="feta-press px-5 rounded-xl feta-display text-xs flex-none"
+              className="habesha-press px-5 rounded-xl habesha-display text-xs flex-none"
               style={{
-                background: FETA.amber,
-                color: FETA.ink,
-                boxShadow: `0 0 0 2px ${FETA.gold}, 0 0 0 4px ${FETA.ink}`,
+                background: HABESHA.amber,
+                color: HABESHA.ink,
+                boxShadow: `0 0 0 2px ${HABESHA.gold}, 0 0 0 4px ${HABESHA.ink}`,
               }}
             >
               Add
@@ -313,7 +296,7 @@ export default function CampaignSetupPage() {
           {prizes.length > 0 && (
             <p
               className="text-xs font-semibold mb-2.5"
-              style={{ color: `${FETA.cream}AA` }}
+              style={{ color: `${HABESHA.cream}AA` }}
             >
               Tap a prize's tier to change it for this outlet only.
             </p>
@@ -322,9 +305,9 @@ export default function CampaignSetupPage() {
           {prizes.length === 0 ? (
             <div
               className="rounded-xl py-5 px-4 text-center"
-              style={{ border: `2px dashed ${FETA.amber}66` }}
+              style={{ border: `2px dashed ${HABESHA.amber}66` }}
             >
-              <p className="text-sm font-semibold" style={{ color: `${FETA.cream}CC` }}>
+              <p className="text-sm font-semibold" style={{ color: `${HABESHA.cream}CC` }}>
                 Nothing on the wheel yet. Pick a prize above to add it.
               </p>
             </div>
@@ -333,26 +316,24 @@ export default function CampaignSetupPage() {
               {prizes.map((prize, index) => (
                 <div
                   key={index}
-                  className="feta-lockup-flat p-4"
-                  style={{ background: FETA.cream, color: FETA.ink }}
+                  className="habesha-lockup-flat p-4"
+                  style={{ background: HABESHA.cream, color: HABESHA.ink }}
                 >
                   <div className="flex justify-between items-center gap-3">
-                    {prizeImage(prize.name) && (
-                      <img
-                        src={prizeImage(prize.name)}
-                        alt=""
-                        aria-hidden="true"
-                        className="flex-none h-10 w-auto object-contain drop-shadow-[0_2px_4px_rgba(23,17,15,0.3)]"
-                      />
-                    )}
-                    <h4 className="feta-display text-sm truncate flex items-center gap-1.5 flex-1">
+                    <PrizeGlyph
+                      name={prize.name}
+                      size={28}
+                      tone={HABESHA.bronze}
+                      className="flex-none"
+                    />
+                    <h4 className="habesha-display text-sm truncate flex items-center gap-1.5 flex-1">
                       {prize.tier === "main" && <span>★</span>}
                       {prize.name}
                     </h4>
                     <button
                       onClick={() => removePrize(index)}
-                      className="feta-eyebrow flex-none px-2.5 py-1.5 rounded-md"
-                      style={{ background: FETA.red, color: FETA.cream }}
+                      className="habesha-eyebrow flex-none px-2.5 py-1.5 rounded-md"
+                      style={{ background: HABESHA.field, color: HABESHA.cream }}
                     >
                       Remove
                     </button>
@@ -361,13 +342,13 @@ export default function CampaignSetupPage() {
                   {isBottlePrize(prize.name) ? (
                     <p
                       className="text-xs font-semibold mt-3"
-                      style={{ color: `${FETA.ink}99` }}
+                      style={{ color: `${HABESHA.ink}99` }}
                     >
                       Drawn from your beer crates below.
                     </p>
                   ) : (
                     <div className="flex items-center gap-3 mt-3">
-                      <span className="feta-eyebrow" style={{ color: FETA.redDeep }}>
+                      <span className="habesha-eyebrow" style={{ color: HABESHA.bronze }}>
                         Quantity
                       </span>
                       <input
@@ -376,23 +357,23 @@ export default function CampaignSetupPage() {
                         value={prize.qty}
                         onChange={(e) => updateQty(index, e.target.value)}
                         aria-label={`Quantity of ${prize.name}`}
-                        className="feta-field flex-1 !py-2 text-center"
+                        className="habesha-field flex-1 !py-2 text-center"
                       />
                     </div>
                   )}
 
                   <div className="flex items-center gap-3 mt-3">
-                    <span className="feta-eyebrow" style={{ color: FETA.redDeep }}>
+                    <span className="habesha-eyebrow" style={{ color: HABESHA.bronze }}>
                       Tier
                     </span>
                     <button
                       onClick={() => toggleTier(index)}
                       aria-label={`Change tier for ${prize.name}`}
-                      className="feta-eyebrow ml-auto px-3 py-2 rounded-md"
+                      className="habesha-eyebrow ml-auto px-3 py-2 rounded-md"
                       style={{
                         background:
-                          prize.tier === "main" ? FETA.red : `${FETA.ink}1A`,
-                        color: prize.tier === "main" ? FETA.cream : FETA.ink,
+                          prize.tier === "main" ? HABESHA.field : `${HABESHA.ink}1A`,
+                        color: prize.tier === "main" ? HABESHA.cream : HABESHA.ink,
                       }}
                     >
                       {prize.tier === "main" ? "★ Main prize" : "Regular prize"}
@@ -401,7 +382,7 @@ export default function CampaignSetupPage() {
 
                   <p
                     className="text-xs font-semibold mt-2"
-                    style={{ color: `${FETA.ink}99` }}
+                    style={{ color: `${HABESHA.ink}99` }}
                   >
                     {prize.tier === "main"
                       ? "Winner fills in name and phone."
@@ -418,12 +399,12 @@ export default function CampaignSetupPage() {
       <div
         className="relative z-10 p-6 pt-4 flex-none"
         style={{
-          background: `linear-gradient(to top, ${FETA.redDark} 55%, transparent 100%)`,
+          background: `linear-gradient(to top, ${HABESHA.inkDeep} 55%, transparent 100%)`,
         }}
       >
-        <FetaButton onClick={startCampaign} className="!text-base">
+        <HabeshaButton onClick={startCampaign} className="!text-base">
           Start campaign →
-        </FetaButton>
+        </HabeshaButton>
       </div>
     </div>
   );

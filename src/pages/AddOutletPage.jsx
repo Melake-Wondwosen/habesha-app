@@ -5,12 +5,12 @@ import { getDeviceId } from "../services/deviceId";
 import { getCities, FALLBACK_CITIES } from "../services/cityService";
 import { API_URL } from "../config";
 import {
-  FETA,
-  FetaMark,
-  FetaButton,
+  HABESHA,
+  HabeshaMark,
+  HabeshaButton,
   Screen,
   SectionLabel,
-} from "../brand/FetaBrand";
+} from "../brand/HabeshaBrand";
 
 export default function AddOutletPage() {
   const { user } = useAuth();
@@ -181,11 +181,11 @@ export default function AddOutletPage() {
           <button
             onClick={() => navigate("/home")}
             aria-label="Back to outlets"
-            className="feta-press flex-none w-10 h-10 rounded-xl flex items-center justify-center"
+            className="habesha-press flex-none w-10 h-10 rounded-xl flex items-center justify-center"
             style={{
-              background: FETA.cream,
-              color: FETA.ink,
-              boxShadow: `0 0 0 2px ${FETA.gold}, 0 0 0 4px ${FETA.ink}`,
+              background: HABESHA.cream,
+              color: HABESHA.ink,
+              boxShadow: `0 0 0 2px ${HABESHA.gold}, 0 0 0 4px ${HABESHA.ink}`,
               fontSize: 18,
               fontWeight: 900,
               lineHeight: 1,
@@ -193,10 +193,10 @@ export default function AddOutletPage() {
           >
             ←
           </button>
-          <FetaMark className="w-10 flex-none" />
+          <HabeshaMark className="w-10 flex-none" />
           <h1
-            className="feta-display text-3xl"
-            style={{ color: FETA.cream, textShadow: `3px 3px 0 ${FETA.ink}` }}
+            className="habesha-display text-3xl"
+            style={{ color: HABESHA.cream, textShadow: `3px 3px 0 ${HABESHA.ink}` }}
           >
             Add outlet
           </h1>
@@ -206,8 +206,8 @@ export default function AddOutletPage() {
         <SectionLabel>Outlet photo *</SectionLabel>
         <label
           htmlFor="outlet-photo"
-          className="feta-lockup flex flex-col items-center justify-center w-full h-56 overflow-hidden cursor-pointer mb-3"
-          style={{ background: FETA.cream, color: FETA.ink }}
+          className="habesha-lockup flex flex-col items-center justify-center w-full h-56 overflow-hidden cursor-pointer mb-3"
+          style={{ background: HABESHA.cream, color: HABESHA.ink }}
         >
           {preview ? (
             <img
@@ -218,8 +218,8 @@ export default function AddOutletPage() {
           ) : (
             <>
               <span className="text-5xl mb-3">📸</span>
-              <span className="feta-display text-sm">Take a photo</span>
-              <span className="text-xs font-semibold mt-1.5" style={{ color: FETA.redDeep }}>
+              <span className="habesha-display text-sm">Take a photo</span>
+              <span className="text-xs font-semibold mt-1.5" style={{ color: HABESHA.bronze }}>
                 Tap to open the camera
               </span>
             </>
@@ -244,11 +244,11 @@ export default function AddOutletPage() {
           <button
             type="button"
             onClick={() => document.getElementById("outlet-photo").click()}
-            className="feta-press w-full mb-5 py-3 rounded-xl feta-display text-xs"
+            className="habesha-press w-full mb-5 py-3 rounded-xl habesha-display text-xs"
             style={{
               background: "transparent",
-              border: `2px solid ${FETA.amber}`,
-              color: FETA.amber,
+              border: `2px solid ${HABESHA.amber}`,
+              color: HABESHA.amber,
             }}
           >
             Retake photo
@@ -263,14 +263,14 @@ export default function AddOutletPage() {
         <div className="space-y-3">
           <input
             placeholder="Outlet name *"
-            className="feta-field"
+            className="habesha-field"
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
 
           <input
             placeholder="Address *"
-            className="feta-field"
+            className="habesha-field"
             value={address}
             onChange={(e) => setAddress(e.target.value)}
           />
@@ -279,7 +279,7 @@ export default function AddOutletPage() {
             value={city}
             onChange={(e) => setCity(e.target.value)}
             aria-label="City"
-            className="feta-field"
+            className="habesha-field"
           >
             <option value="">Select a city *</option>
             {cities.map((c) => (
@@ -293,8 +293,8 @@ export default function AddOutletPage() {
         {/* GPS */}
         <button
           onClick={getLocation}
-          className="feta-lockup-sm feta-press w-full mt-4 py-3.5 feta-display text-xs"
-          style={{ background: FETA.amber, color: FETA.ink }}
+          className="habesha-lockup-sm habesha-press w-full mt-4 py-3.5 habesha-display text-xs"
+          style={{ background: HABESHA.amber, color: HABESHA.ink }}
         >
           📍 Capture GPS location *
         </button>
@@ -303,9 +303,9 @@ export default function AddOutletPage() {
           <div
             className="mt-3 px-4 py-3 rounded-xl text-xs font-bold"
             style={{
-              background: `${FETA.ink}AA`,
-              color: FETA.amber,
-              boxShadow: `0 0 0 2px ${FETA.gold}`,
+              background: `${HABESHA.ink}AA`,
+              color: HABESHA.amber,
+              boxShadow: `0 0 0 2px ${HABESHA.gold}`,
             }}
           >
             Location saved · {Number(lat).toFixed(5)}, {Number(lng).toFixed(5)}
@@ -314,14 +314,14 @@ export default function AddOutletPage() {
 
         {/* Actions */}
         <div className="mt-auto pt-8">
-          <FetaButton onClick={handleSubmit} disabled={loading} className="!text-base">
+          <HabeshaButton onClick={handleSubmit} disabled={loading} className="!text-base">
             {loading ? "Saving…" : "Save outlet"}
-          </FetaButton>
+          </HabeshaButton>
 
           <button
             onClick={() => navigate("/home")}
-            className="w-full mt-4 py-2 feta-eyebrow"
-            style={{ color: `${FETA.cream}AA` }}
+            className="w-full mt-4 py-2 habesha-eyebrow"
+            style={{ color: `${HABESHA.cream}AA` }}
           >
             Cancel
           </button>

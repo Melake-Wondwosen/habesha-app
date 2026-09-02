@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  FETA,
-  FetaMark,
-  FetaButton,
+  HABESHA,
+  HabeshaMark,
+  HabeshaButton,
   Screen,
   SectionLabel,
-} from "../brand/FetaBrand";
+} from "../brand/HabeshaBrand";
 import { useAuth } from "../context/AuthContext";
 import PageHeader from "../components/PageHeader";
 import { getSettings, saveSettings } from "../services/settingsService";
@@ -173,7 +173,7 @@ export default function AdminPrizesPage() {
         {loading && (
           <p
             className="text-center py-4 text-sm font-semibold"
-            style={{ color: `${FETA.cream}AA` }}
+            style={{ color: `${HABESHA.cream}AA` }}
           >
             Loading the current list…
           </p>
@@ -182,8 +182,8 @@ export default function AdminPrizesPage() {
         {error && (
           <div
             role="alert"
-            className="feta-lockup-flat px-4 py-3 mb-4 text-sm font-semibold"
-            style={{ background: FETA.ink, color: FETA.amber }}
+            className="habesha-lockup-flat px-4 py-3 mb-4 text-sm font-semibold"
+            style={{ background: HABESHA.ink, color: HABESHA.amber }}
           >
             {error}
           </div>
@@ -192,8 +192,8 @@ export default function AdminPrizesPage() {
         {notice && (
           <div
             role="status"
-            className="feta-lockup-flat px-4 py-3 mb-4 text-sm font-semibold"
-            style={{ background: FETA.cream, color: FETA.redDeep }}
+            className="habesha-lockup-flat px-4 py-3 mb-4 text-sm font-semibold"
+            style={{ background: HABESHA.cream, color: HABESHA.bronze }}
           >
             {notice}
           </div>
@@ -206,10 +206,10 @@ export default function AdminPrizesPage() {
           {prizes.map((p, i) => (
             <div
               key={i}
-              className="feta-lockup-flat p-4"
+              className="habesha-lockup-flat p-4"
               style={{
-                background: p.active ? FETA.cream : `${FETA.cream}88`,
-                color: FETA.ink,
+                background: p.active ? HABESHA.cream : `${HABESHA.cream}88`,
+                color: HABESHA.ink,
               }}
             >
               <div className="flex items-center gap-2">
@@ -217,14 +217,14 @@ export default function AdminPrizesPage() {
                   value={p.name}
                   onChange={(e) => update(i, { name: e.target.value })}
                   aria-label={`Prize ${i + 1} name`}
-                  className="feta-field flex-1 !py-2 !text-sm"
+                  className="habesha-field flex-1 !py-2 !text-sm"
                 />
                 <button
                   onClick={() => move(i, -1)}
                   aria-label={`Move ${p.name} up`}
                   disabled={i === 0}
                   className="w-9 h-9 rounded-lg flex-none font-bold disabled:opacity-30"
-                  style={{ background: FETA.ink, color: FETA.amber }}
+                  style={{ background: HABESHA.ink, color: HABESHA.amber }}
                 >
                   ↑
                 </button>
@@ -233,14 +233,14 @@ export default function AdminPrizesPage() {
                   aria-label={`Move ${p.name} down`}
                   disabled={i === prizes.length - 1}
                   className="w-9 h-9 rounded-lg flex-none font-bold disabled:opacity-30"
-                  style={{ background: FETA.ink, color: FETA.amber }}
+                  style={{ background: HABESHA.ink, color: HABESHA.amber }}
                 >
                   ↓
                 </button>
               </div>
 
               <div className="flex items-center gap-3 mt-3">
-                <span className="feta-eyebrow" style={{ color: FETA.redDeep }}>
+                <span className="habesha-eyebrow" style={{ color: HABESHA.bronze }}>
                   Default stock
                 </span>
                 <input
@@ -249,15 +249,15 @@ export default function AdminPrizesPage() {
                   value={p.qty}
                   onChange={(e) => update(i, { qty: e.target.value })}
                   aria-label={`Default stock for ${p.name}`}
-                  className="feta-field w-20 !py-2 text-center"
+                  className="habesha-field w-20 !py-2 text-center"
                 />
 
                 <button
                   onClick={() => update(i, { active: !p.active })}
-                  className="feta-eyebrow px-3 py-2 rounded-md"
+                  className="habesha-eyebrow px-3 py-2 rounded-md"
                   style={{
-                    background: p.active ? FETA.amber : FETA.silver,
-                    color: FETA.ink,
+                    background: p.active ? HABESHA.amber : HABESHA.silver,
+                    color: HABESHA.ink,
                   }}
                 >
                   {p.active ? "On the wheel" : "Hidden"}
@@ -265,15 +265,15 @@ export default function AdminPrizesPage() {
 
                 <button
                   onClick={() => remove(i)}
-                  className="feta-eyebrow px-3 py-2 rounded-md"
-                  style={{ background: FETA.red, color: FETA.cream }}
+                  className="habesha-eyebrow px-3 py-2 rounded-md"
+                  style={{ background: HABESHA.field, color: HABESHA.cream }}
                 >
                   Delete
                 </button>
               </div>
 
               <div className="flex items-center gap-3 mt-3">
-                <span className="feta-eyebrow" style={{ color: FETA.redDeep }}>
+                <span className="habesha-eyebrow" style={{ color: HABESHA.bronze }}>
                   Chance
                 </span>
                 <input
@@ -282,28 +282,28 @@ export default function AdminPrizesPage() {
                   value={p.weight}
                   onChange={(e) => update(i, { weight: e.target.value })}
                   aria-label={`Chance weight for ${p.name}`}
-                  className="feta-field w-20 !py-2 text-center"
+                  className="habesha-field w-20 !py-2 text-center"
                 />
                 <span
                   className="text-xs font-bold"
-                  style={{ color: FETA.redDeep }}
+                  style={{ color: HABESHA.bronze }}
                 >
                   {oddsFor(p)}
                 </span>
               </div>
 
               <div className="flex items-center gap-3 mt-3">
-                <span className="feta-eyebrow" style={{ color: FETA.redDeep }}>
+                <span className="habesha-eyebrow" style={{ color: HABESHA.bronze }}>
                   Prize tier
                 </span>
                 <button
                   onClick={() =>
                     update(i, { tier: p.tier === "main" ? "regular" : "main" })
                   }
-                  className="feta-eyebrow px-3 py-2 rounded-md ml-auto"
+                  className="habesha-eyebrow px-3 py-2 rounded-md ml-auto"
                   style={{
-                    background: p.tier === "main" ? FETA.red : `${FETA.ink}22`,
-                    color: p.tier === "main" ? FETA.cream : FETA.ink,
+                    background: p.tier === "main" ? HABESHA.field : `${HABESHA.ink}22`,
+                    color: p.tier === "main" ? HABESHA.cream : HABESHA.ink,
                   }}
                 >
                   {p.tier === "main" ? "★ Main prize" : "Regular prize"}
@@ -312,7 +312,7 @@ export default function AdminPrizesPage() {
               {p.tier === "main" && (
                 <p
                   className="text-xs font-semibold mt-2"
-                  style={{ color: FETA.redDeep }}
+                  style={{ color: HABESHA.bronze }}
                 >
                   Winners of this prize go through full name + phone registration.
                 </p>
@@ -330,15 +330,15 @@ export default function AdminPrizesPage() {
               onChange={(e) => setNewName(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && add()}
               placeholder="Name the prize"
-              className="feta-field flex-1 !py-3 !text-sm"
+              className="habesha-field flex-1 !py-3 !text-sm"
             />
             <button
               onClick={add}
-              className="feta-press px-5 rounded-xl feta-display text-xs flex-none"
+              className="habesha-press px-5 rounded-xl habesha-display text-xs flex-none"
               style={{
-                background: FETA.amber,
-                color: FETA.ink,
-                boxShadow: `0 0 0 2px ${FETA.gold}, 0 0 0 4px ${FETA.ink}`,
+                background: HABESHA.amber,
+                color: HABESHA.ink,
+                boxShadow: `0 0 0 2px ${HABESHA.gold}, 0 0 0 4px ${HABESHA.ink}`,
               }}
             >
               Add
@@ -350,11 +350,11 @@ export default function AdminPrizesPage() {
         <div className="mt-8">
           <SectionLabel>Chance of winning nothing</SectionLabel>
           <div
-            className="feta-lockup-flat p-4"
-            style={{ background: FETA.cream, color: FETA.ink }}
+            className="habesha-lockup-flat p-4"
+            style={{ background: HABESHA.cream, color: HABESHA.ink }}
           >
             <div className="flex items-center gap-3">
-              <span className="feta-eyebrow" style={{ color: FETA.redDeep }}>
+              <span className="habesha-eyebrow" style={{ color: HABESHA.bronze }}>
                 No Win
               </span>
               <input
@@ -366,9 +366,9 @@ export default function AdminPrizesPage() {
                   setDirty(true);
                 }}
                 aria-label="Chance weight for winning nothing"
-                className="feta-field w-20 !py-2 text-center"
+                className="habesha-field w-20 !py-2 text-center"
               />
-              <span className="text-xs font-bold" style={{ color: FETA.redDeep }}>
+              <span className="text-xs font-bold" style={{ color: HABESHA.bronze }}>
                 {totalWeight > 0
                   ? `${Math.round((NO_WIN_WEIGHT / totalWeight) * 100)}%`
                   : "—"}
@@ -376,7 +376,7 @@ export default function AdminPrizesPage() {
             </div>
             <p
               className="text-xs font-semibold mt-2"
-              style={{ color: `${FETA.ink}88` }}
+              style={{ color: `${HABESHA.ink}88` }}
             >
               Set to 0 and every spin wins something.
             </p>
@@ -387,7 +387,7 @@ export default function AdminPrizesPage() {
         <div className="mt-8">
           <SectionLabel>Publish</SectionLabel>
 
-          <label className="feta-eyebrow block mb-2" style={{ color: FETA.amber }}>
+          <label className="habesha-eyebrow block mb-2" style={{ color: HABESHA.amber }}>
             Your password
           </label>
           <input
@@ -396,17 +396,17 @@ export default function AdminPrizesPage() {
             onChange={(e) => setPassword(e.target.value)}
             placeholder={`Confirm as ${user?.username || "you"}`}
             autoComplete="current-password"
-            className="feta-field mb-4"
+            className="habesha-field mb-4"
           />
 
-          <FetaButton onClick={save} disabled={saving} className="!text-base">
+          <HabeshaButton onClick={save} disabled={saving} className="!text-base">
             {saving ? "Saving…" : dirty ? "Save and publish" : "Published"}
-          </FetaButton>
+          </HabeshaButton>
 
           {cachedAt && (
             <p
               className="text-xs font-semibold text-center mt-3"
-              style={{ color: `${FETA.cream}99` }}
+              style={{ color: `${HABESHA.cream}99` }}
             >
               Last synced {new Date(cachedAt).toLocaleString()}
             </p>
@@ -414,8 +414,8 @@ export default function AdminPrizesPage() {
 
           <button
             onClick={() => navigate("/home")}
-            className="w-full mt-4 py-2 feta-eyebrow"
-            style={{ color: `${FETA.cream}AA` }}
+            className="w-full mt-4 py-2 habesha-eyebrow"
+            style={{ color: `${HABESHA.cream}AA` }}
           >
             Back to outlets
           </button>

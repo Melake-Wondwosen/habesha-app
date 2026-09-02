@@ -5,7 +5,7 @@ export const THEMES = [
   {
     key: "poster",
     name: "Poster",
-    blurb: "The Feta lockup — hard keylines and offset shadows",
+    blurb: "The Habesha lockup — hard keylines and offset shadows",
   },
   {
     key: "skeuo",
@@ -15,16 +15,16 @@ export const THEMES = [
   {
     key: "neu",
     name: "Soft relief",
-    blurb: "Brushed silver panels raised off the red ground",
+    blurb: "Brushed panels raised off the ink ground",
   },
   {
     key: "glass",
     name: "Smoked glass",
-    blurb: "Translucent panels, the sunburst showing through",
+    blurb: "Translucent panels, the weave showing through",
   },
 ];
 
-const STORE = "feta_theme";
+const STORE = "habesha_theme";
 
 export function applyTheme(key) {
   const theme = THEMES.some((t) => t.key === key) ? key : "poster";

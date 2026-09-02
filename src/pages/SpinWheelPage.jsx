@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { FETA, FetaMark, Sunburst, TibebBand } from "../brand/FetaBrand";
+import { HABESHA, HabeshaMark, TibebWash, TibebBand } from "../brand/HabeshaBrand";
 import { API_URL } from "../config";
 import { getWinMessage, fillTemplate, getSettings } from "../services/settingsService";
 import { logSpin } from "../services/statsService";
@@ -96,16 +96,16 @@ export default function SpinWheelPage() {
   /* Segments cycle through the four brand inks so no two neighbours
      ever share a colour: cream, red, gold, ink, amber, deep red. */
   const COLORS = [
-    { bg: FETA.cream, fg: FETA.ink },
-    { bg: FETA.red, fg: FETA.cream },
-    { bg: FETA.gold, fg: FETA.ink },
-    { bg: FETA.ink, fg: FETA.amber },
-    { bg: FETA.amber, fg: FETA.ink },
-    { bg: FETA.redDeep, fg: FETA.cream },
+    { bg: HABESHA.cream, fg: HABESHA.ink },
+    { bg: HABESHA.field, fg: HABESHA.cream },
+    { bg: HABESHA.gold, fg: HABESHA.ink },
+    { bg: HABESHA.ink, fg: HABESHA.amber },
+    { bg: HABESHA.amber, fg: HABESHA.ink },
+    { bg: HABESHA.bronze, fg: HABESHA.cream },
   ];
   /* How likely "No Win" is, relative to the prize weights set in admin. */
 
-const NO_WIN_COLOR = { bg: FETA.redDark, fg: "#E9A9AE" };
+const NO_WIN_COLOR = { bg: HABESHA.inkDeep, fg: "#E9A9AE" };
 
   useEffect(() => {
     const updateSize = () => {
@@ -272,23 +272,23 @@ const NO_WIN_COLOR = { bg: FETA.redDark, fg: "#E9A9AE" };
        cream band. The wheel is cut from the same material as the logo. */
     ctx.beginPath();
     ctx.arc(cx, cy, r, 0, 2 * Math.PI);
-    ctx.fillStyle = FETA.ink;
+    ctx.fillStyle = HABESHA.ink;
     ctx.fill();
 
     ctx.beginPath();
     ctx.arc(cx, cy, r - 3, 0, 2 * Math.PI);
-    ctx.fillStyle = FETA.gold;
+    ctx.fillStyle = HABESHA.gold;
     ctx.fill();
 
     ctx.beginPath();
     ctx.arc(cx, cy, r - 6, 0, 2 * Math.PI);
-    ctx.fillStyle = FETA.cream;
+    ctx.fillStyle = HABESHA.cream;
     ctx.fill();
 
     /* Tick marks on the rim — the dashed row from the tibeb weave. */
     const ticks = 48;
     ctx.save();
-    ctx.strokeStyle = FETA.red;
+    ctx.strokeStyle = HABESHA.field;
     ctx.lineWidth = Math.max(2, size * 0.008);
     ctx.lineCap = "butt";
     for (let i = 0; i < ticks; i++) {
@@ -307,9 +307,9 @@ const NO_WIN_COLOR = { bg: FETA.redDark, fg: "#E9A9AE" };
     ctx.clip();
 
     if (slices.length === 0) {
-      ctx.fillStyle = FETA.cream;
+      ctx.fillStyle = HABESHA.cream;
       ctx.fill();
-      ctx.fillStyle = FETA.redDeep;
+      ctx.fillStyle = HABESHA.bronze;
       ctx.font = `800 ${size * 0.038}px Archivo, system-ui, sans-serif`;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
@@ -328,7 +328,7 @@ const NO_WIN_COLOR = { bg: FETA.redDark, fg: "#E9A9AE" };
       ctx.closePath();
       ctx.fillStyle = sl.bg;
       ctx.fill();
-      ctx.strokeStyle = FETA.gold;
+      ctx.strokeStyle = HABESHA.gold;
       ctx.lineWidth = 2;
       ctx.stroke();
 
@@ -381,15 +381,15 @@ const NO_WIN_COLOR = { bg: FETA.redDark, fg: "#E9A9AE" };
     const hubR = r * 0.26;
     ctx.beginPath();
     ctx.arc(cx, cy, hubR + 5, 0, 2 * Math.PI);
-    ctx.fillStyle = FETA.ink;
+    ctx.fillStyle = HABESHA.ink;
     ctx.fill();
     ctx.beginPath();
     ctx.arc(cx, cy, hubR + 2, 0, 2 * Math.PI);
-    ctx.fillStyle = FETA.gold;
+    ctx.fillStyle = HABESHA.gold;
     ctx.fill();
     ctx.beginPath();
     ctx.arc(cx, cy, hubR, 0, 2 * Math.PI);
-    ctx.fillStyle = FETA.red;
+    ctx.fillStyle = HABESHA.field;
     ctx.fill();
   }
 
@@ -535,14 +535,13 @@ const NO_WIN_COLOR = { bg: FETA.redDark, fg: "#E9A9AE" };
     <div
       className="relative h-[100dvh] max-w-md mx-auto overflow-hidden flex flex-col"
       style={{
-        background: `radial-gradient(90% 60% at 50% 42%, ${FETA.red} 0%, ${FETA.redDeep} 55%, ${FETA.redDark} 100%)`,
-        color: FETA.cream,
+        background: `radial-gradient(90% 60% at 50% 42%, ${HABESHA.field} 0%, ${HABESHA.bronze} 55%, ${HABESHA.inkDeep} 100%)`,
+        color: HABESHA.cream,
       }}
     >
-      {/* Sunburst backdrop — the rays from the master artwork */}
-      <Sunburst
-        rays={72}
-        opacity={0.35}
+      {/* Woven backdrop — the same chevron as the trim, blown up */}
+      <TibebWash
+        opacity={0.07}
         className="absolute pointer-events-none"
         style={{
           top: "50%",
@@ -560,18 +559,18 @@ const NO_WIN_COLOR = { bg: FETA.redDark, fg: "#E9A9AE" };
       <div className="relative z-10 flex flex-col h-full w-full">
         {/* Header */}
         <div className="pt-5 pb-2 px-5 flex items-center gap-3 flex-none">
-          <FetaMark className="w-11 flex-none" />
+          <HabeshaMark className="w-11 flex-none" />
           <div className="flex-1 min-w-0 text-center">
             <h2
-              className="feta-display text-base truncate"
-              style={{ color: FETA.cream, textShadow: `2px 2px 0 ${FETA.ink}` }}
+              className="habesha-display text-base truncate"
+              style={{ color: HABESHA.cream, textShadow: `2px 2px 0 ${HABESHA.ink}` }}
             >
               {outlet?.name || "Outlet"}
             </h2>
             {(outlet?.address || outlet?.city) && (
               <p
                 className="text-xs font-semibold mt-0.5 truncate"
-                style={{ color: FETA.amber }}
+                style={{ color: HABESHA.amber }}
               >
                 {[outlet?.address, outlet?.city].filter(Boolean).join(", ")}
               </p>
@@ -580,11 +579,11 @@ const NO_WIN_COLOR = { bg: FETA.redDark, fg: "#E9A9AE" };
           <button
             onClick={() => navigate("/home")}
             aria-label="Close and go back to outlets"
-            className="w-10 h-10 rounded-full flex items-center justify-center flex-none feta-press"
+            className="w-10 h-10 rounded-full flex items-center justify-center flex-none habesha-press"
             style={{
-              background: FETA.cream,
-              color: FETA.ink,
-              boxShadow: `0 0 0 2px ${FETA.ink}`,
+              background: HABESHA.cream,
+              color: HABESHA.ink,
+              boxShadow: `0 0 0 2px ${HABESHA.ink}`,
               fontWeight: 900,
             }}
           >
@@ -604,8 +603,8 @@ const NO_WIN_COLOR = { bg: FETA.redDark, fg: "#E9A9AE" };
                 height: 0,
                 borderLeft: `${pointerSize}px solid transparent`,
                 borderRight: `${pointerSize}px solid transparent`,
-                borderTop: `${pointerSize * 1.7}px solid ${FETA.ink}`,
-                filter: `drop-shadow(0 3px 0 ${FETA.gold})`,
+                borderTop: `${pointerSize * 1.7}px solid ${HABESHA.ink}`,
+                filter: `drop-shadow(0 3px 0 ${HABESHA.gold})`,
               }}
             />
             <div
@@ -616,7 +615,7 @@ const NO_WIN_COLOR = { bg: FETA.redDark, fg: "#E9A9AE" };
                 height: 0,
                 borderLeft: `${pointerSize * 0.68}px solid transparent`,
                 borderRight: `${pointerSize * 0.68}px solid transparent`,
-                borderTop: `${pointerSize * 1.15}px solid ${FETA.cream}`,
+                borderTop: `${pointerSize * 1.15}px solid ${HABESHA.cream}`,
               }}
             />
 
@@ -642,8 +641,8 @@ const NO_WIN_COLOR = { bg: FETA.redDark, fg: "#E9A9AE" };
               style={{
                 width: centerSize,
                 height: centerSize,
-                background: FETA.red,
-                boxShadow: `0 0 0 3px ${FETA.gold}, 0 0 0 6px ${FETA.ink}`,
+                background: HABESHA.field,
+                boxShadow: `0 0 0 3px ${HABESHA.gold}, 0 0 0 6px ${HABESHA.ink}`,
                 border: 0,
               }}
             >
@@ -653,12 +652,12 @@ const NO_WIN_COLOR = { bg: FETA.redDark, fg: "#E9A9AE" };
                   style={{
                     width: centerSize * 0.34,
                     height: centerSize * 0.34,
-                    border: `3px solid ${FETA.cream}44`,
-                    borderTopColor: FETA.cream,
+                    border: `3px solid ${HABESHA.cream}44`,
+                    borderTopColor: HABESHA.cream,
                   }}
                 />
               ) : (
-                <FetaMark
+                <HabeshaMark
                   alt=""
                   className="pointer-events-none select-none"
                   style={{ width: centerSize * 0.62 }}
@@ -675,8 +674,8 @@ const NO_WIN_COLOR = { bg: FETA.redDark, fg: "#E9A9AE" };
               style={{ fontSize: 12 }}
             >
               <div
-                className="feta-lockup-flat px-4 py-3 font-semibold"
-                style={{ background: FETA.ink, color: FETA.amber }}
+                className="habesha-lockup-flat px-4 py-3 font-semibold"
+                style={{ background: HABESHA.ink, color: HABESHA.amber }}
               >
                 Wheel couldn't draw: {drawError}
               </div>
@@ -685,13 +684,13 @@ const NO_WIN_COLOR = { bg: FETA.redDark, fg: "#E9A9AE" };
 
           {!drawError && campaign.length === 0 && (
             <div className="w-full max-w-sm px-4 text-center">
-              <p className="feta-display text-sm" style={{ color: FETA.cream }}>
+              <p className="habesha-display text-sm" style={{ color: HABESHA.cream }}>
                 No prizes loaded
               </p>
               <button
                 onClick={() => navigate(`/campaign/${id}`, { state: { outlet } })}
-                className="feta-eyebrow mt-2 underline"
-                style={{ color: FETA.amber }}
+                className="habesha-eyebrow mt-2 underline"
+                style={{ color: HABESHA.amber }}
               >
                 Set up the campaign
               </button>
@@ -702,10 +701,10 @@ const NO_WIN_COLOR = { bg: FETA.redDark, fg: "#E9A9AE" };
           {winner && (
             <div className="w-full max-w-sm px-4">
               <div
-                className="feta-lockup-flat text-center py-3 px-5 feta-display"
+                className="habesha-lockup-flat text-center py-3 px-5 habesha-display"
                 style={{
-                  background: winner.isNoWin ? FETA.ink : FETA.cream,
-                  color: winner.isNoWin ? FETA.amber : FETA.ink,
+                  background: winner.isNoWin ? HABESHA.ink : HABESHA.cream,
+                  color: winner.isNoWin ? HABESHA.amber : HABESHA.ink,
                   fontSize: Math.max(14, wheelSize * 0.035),
                 }}
               >
@@ -716,8 +715,8 @@ const NO_WIN_COLOR = { bg: FETA.redDark, fg: "#E9A9AE" };
 
           {!hasSpun && !spinning && (
             <p
-              className="feta-display feta-pulse"
-              style={{ color: FETA.cream, fontSize: Math.max(14, wheelSize * 0.038) }}
+              className="habesha-display habesha-pulse"
+              style={{ color: HABESHA.cream, fontSize: Math.max(14, wheelSize * 0.038) }}
             >
               Tap ፈታ to spin
             </p>
@@ -730,12 +729,12 @@ const NO_WIN_COLOR = { bg: FETA.redDark, fg: "#E9A9AE" };
           <button
             onClick={spin}
             disabled={spinning || outOfStock}
-            className="feta-lockup feta-press feta-display w-full disabled:opacity-45"
+            className="habesha-lockup habesha-press habesha-display w-full disabled:opacity-45"
             style={{
               height: Math.max(52, wheelSize * 0.11),
               fontSize: Math.max(15, wheelSize * 0.036),
-              background: spinning ? FETA.silver : FETA.amber,
-              color: FETA.ink,
+              background: spinning ? HABESHA.silver : HABESHA.amber,
+              color: HABESHA.ink,
               letterSpacing: "0.08em",
             }}
           >
@@ -755,23 +754,23 @@ const NO_WIN_COLOR = { bg: FETA.redDark, fg: "#E9A9AE" };
         <div
           className="fixed inset-0 z-40 flex items-center justify-center px-6"
           style={{
-            background: `${FETA.redDark}77`,
+            background: `${HABESHA.inkDeep}77`,
             backdropFilter: "blur(3px)",
             WebkitBackdropFilter: "blur(3px)",
           }}
         >
           <div
-            className="feta-lockup w-full max-w-sm text-center py-9 px-6"
-            style={{ background: `${FETA.cream}F2`, color: FETA.ink }}
+            className="habesha-lockup w-full max-w-sm text-center py-9 px-6"
+            style={{ background: `${HABESHA.cream}F2`, color: HABESHA.ink }}
           >
             <WinCelebration prize={regularWinOverlay} />
 
-            <p className="feta-eyebrow" style={{ color: FETA.redDeep }}>
+            <p className="habesha-eyebrow" style={{ color: HABESHA.bronze }}>
               🎉 Winner
             </p>
             <h2
-              className="feta-display text-2xl mt-2"
-              style={{ textShadow: `2px 2px 0 ${FETA.gold}` }}
+              className="habesha-display text-2xl mt-2"
+              style={{ textShadow: `2px 2px 0 ${HABESHA.gold}` }}
             >
               {fillTemplate(winMessage, regularWinOverlay)}
             </h2>
@@ -780,11 +779,11 @@ const NO_WIN_COLOR = { bg: FETA.redDark, fg: "#E9A9AE" };
                 setRegularWinOverlay(null);
                 setWinner(null);
               }}
-              className="feta-lockup feta-press feta-display w-full mt-7"
+              className="habesha-lockup habesha-press habesha-display w-full mt-7"
               style={{
                 height: 52,
-                background: FETA.amber,
-                color: FETA.ink,
+                background: HABESHA.amber,
+                color: HABESHA.ink,
                 letterSpacing: "0.08em",
               }}
             >

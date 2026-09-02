@@ -1,69 +1,44 @@
 import { useId } from "react";
-import fetaMark from "../assets/feta-mark.png";
-import fetaLockup from "../assets/feta-logo-lockup.png";
-import fetaPattern from "../assets/feta-pattern-white.png";
+import habeshaMark from "../assets/habesha-mark.png";
 import adeyFlower from "../assets/habesha-flower.png";
 
-export const FETA = {
-  red: "#B4222C",
-  redDeep: "#7C1319",
-  redDark: "#480A0E",
-  gold: "#B78B32",
-  goldLit: "#D8AB4C",
-  amber: "#FBB15C",
-  cream: "#FFF4E4",
-  ink: "#17110F",
-  silver: "#9A9A9A",
+export const HABESHA = {
+  /* Sampled off the supplied artwork — the sticker field, the tibeb
+     band's gold gradient, and the highlight in the Adey Abeba. */
+  ink: "#14100F",
+  inkDeep: "#0B0808",
+  field: "#231F20",
+  bronze: "#754927",
+  gold: "#B38A4A",
+  goldLit: "#D0AC63",
+  amber: "#E5CA78",
+  adey: "#F0E77F",
+  cream: "#F7F1E3",
+  silver: "#8D8378",
 };
 
 /* ------------------------------------------------------------------
-   Sunburst — the gold rays radiating from the fist bump in the
-   master artwork. Ambient background on every screen.
-   ------------------------------------------------------------------ */
-export function Sunburst({
-  rays = 56,
-  color = FETA.gold,
-  opacity = 0.5,
-  spin = false,
-  className = "",
-  style,
-}) {
-  const lines = Array.from({ length: rays }, (_, i) => {
-    const a = ((i * 360) / rays) * (Math.PI / 180);
-    return (
-      <line
-        key={i}
-        x1="50"
-        y1="50"
-        x2={50 + Math.cos(a) * 80}
-        y2={50 + Math.sin(a) * 80}
-        stroke={color}
-        strokeWidth="0.4"
-      />
-    );
-  });
+   Tibeb wash — the ambient behind every screen. A single oversized,
+   very faint band of the weave, rotated off-axis so it reads as
+   texture rather than as a border that has slipped.
 
-  /* Positioning (top/left/width/height/translate) lives on this outer
-     element and never changes. The rotation animation lives on the inner
-     svg, which fills the wrapper exactly and carries no other transform —
-     so the animation can't clobber the positioning translate the way it
-     would if both were on the same element. */
+   This replaces the sunburst that came from the old artwork; the
+   motif here is the same chevron the stickers are built from.
+   ------------------------------------------------------------------ */
+export function TibebWash({ opacity = 0.07, className = "", style }) {
   return (
-    <div className={className} style={style}>
-      <svg
-        viewBox="0 0 100 100"
-        aria-hidden="true"
-        className={`w-full h-full ${spin ? "feta-rays-turn" : ""}`}
-        style={{ opacity }}
-      >
-        {lines}
-      </svg>
+    <div
+      aria-hidden="true"
+      className={className}
+      style={{ opacity, ...style }}
+    >
+      <TibebBand height={220} ground="transparent" line={HABESHA.gold} />
     </div>
   );
 }
 
 /* ------------------------------------------------------------------
-   Tibeb band — traced from the Feta pattern sheet. The band is a
+   Tibeb band — the chevron weave from the sticker artwork. The band is a
    solid cream field with the chevron and triangle motif cut into it
    in red, which is how the weave is actually drawn in the artwork.
 
@@ -72,8 +47,8 @@ export function Sunburst({
    ------------------------------------------------------------------ */
 export function TibebBand({
   height = 22,
-  ground = FETA.cream,
-  line = FETA.red,
+  ground = HABESHA.field,
+  line = HABESHA.gold,
   opacity = 1,
   flip = false,
   tiles = 0,
@@ -135,7 +110,7 @@ export function TibebBand({
 /* The dashed row that separates the woven bands in the pattern sheet. */
 export function TibebDashes({
   height = 10,
-  color = FETA.cream,
+  color = HABESHA.cream,
   opacity = 1,
   className = "",
 }) {
@@ -173,23 +148,20 @@ export function TibebDashes({
 }
 
 /* ------------------------------------------------------------------
-   Tibeb field — the pattern sheet itself, used as a large background
-   texture. This is the supplied artwork, not a redraw.
+   Tibeb field — a large, tiled texture for panels that want more
+   than the wash. Drawn from the same chevron rather than a bitmap,
+   so it stays crisp and carries no leftover artwork.
    ------------------------------------------------------------------ */
-export function TibebField({ opacity = 0.14, className = "", style }) {
+export function TibebField({ opacity = 0.12, className = "", style }) {
   return (
     <div
       aria-hidden="true"
       className={className}
-      style={{
-        backgroundImage: `url(${fetaPattern})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-        opacity,
-        ...style,
-      }}
-    />
+      style={{ opacity, overflow: "hidden", ...style }}
+    >
+      <TibebBand height={140} ground="transparent" line={HABESHA.gold} />
+      <TibebBand height={140} ground="transparent" line={HABESHA.gold} flip />
+    </div>
   );
 }
 
@@ -236,43 +208,36 @@ export function AdeyScatter({ blooms = BLOOMS, className = "" }) {
   );
 }
 
-/* The full artwork: three friends, fist bump, wordmark. Hero use only. */
-export function FetaLockup({ className = "", alt = "Feta", style }) {
-  return <img src={fetaLockup} alt={alt} className={className} style={style} />;
-}
 
 /* The wordmark on its own. Everything smaller than the hero uses this. */
-export function FetaMark({ className = "", alt = "Feta", style }) {
-  return <img src={fetaMark} alt={alt} className={className} style={style} />;
+export function HabeshaMark({ className = "", alt = "የሚያረካ", style }) {
+  return <img src={habeshaMark} alt={alt} className={className} style={style} />;
 }
 
 /* ------------------------------------------------------------------
-   Screen — the shared shell. Deep red ground, ambient rays, woven
+   Screen — the shared shell. Black ground, a faint tibeb wash, woven
    trim top and bottom. Every page is a panel cut from the same cloth.
+
+   `rays` is kept as the prop name so existing callers don't need
+   touching; it now controls the wash.
    ------------------------------------------------------------------ */
 export function Screen({ children, rays = true, trim = true, fullWidth = false }) {
   return (
     <div
-      className={`feta-screen relative min-h-screen ${fullWidth ? "" : "max-w-md"} mx-auto overflow-hidden flex flex-col`}
+      className={`habesha-screen relative min-h-screen ${fullWidth ? "" : "max-w-md"} mx-auto overflow-hidden flex flex-col`}
       style={{
-        background: `radial-gradient(120% 80% at 50% 0%, ${FETA.red} 0%, ${FETA.redDeep} 55%, ${FETA.redDark} 100%)`,
+        background: `radial-gradient(130% 90% at 50% 0%, ${HABESHA.field} 0%, ${HABESHA.ink} 58%, ${HABESHA.inkDeep} 100%)`,
       }}
     >
       {rays && (
-        <Sunburst
-          spin
-          opacity={0.26}
+        <TibebWash
+          opacity={0.06}
           className="absolute pointer-events-none"
           style={{
-            top: "-40%",
+            top: "18%",
             left: "50%",
-            width: "190%",
-            /* Sized against the viewport, not the container. A percentage
-               height here feeds back into the container's own auto height
-               and stretches the page far past its content. */
-            height: "190vh",
-            maxHeight: "190vh",
-            transform: "translateX(-50%)",
+            width: "220%",
+            transform: "translateX(-50%) rotate(-12deg)",
             transformOrigin: "center",
           }}
         />
@@ -300,7 +265,7 @@ export function Screen({ children, rays = true, trim = true, fullWidth = false }
 /* ------------------------------------------------------------------
    Buttons. Primary is cream on red — a label stuck to the poster.
    ------------------------------------------------------------------ */
-export function FetaButton({
+export function HabeshaButton({
   children,
   variant = "primary",
   className = "",
@@ -308,15 +273,15 @@ export function FetaButton({
   ...rest
 }) {
   const skins = {
-    primary: { background: FETA.cream, color: FETA.ink },
-    gold: { background: FETA.amber, color: FETA.ink },
-    ink: { background: FETA.ink, color: FETA.amber },
+    primary: { background: HABESHA.cream, color: HABESHA.ink },
+    gold: { background: HABESHA.amber, color: HABESHA.ink },
+    ink: { background: HABESHA.ink, color: HABESHA.amber },
   };
 
   return (
     <button
       {...rest}
-      className={`feta-lockup feta-press feta-display w-full text-lg py-4 px-5 disabled:opacity-45 disabled:pointer-events-none ${className}`}
+      className={`habesha-lockup habesha-press habesha-display w-full text-lg py-4 px-5 disabled:opacity-45 disabled:pointer-events-none ${className}`}
       style={{ ...skins[variant], letterSpacing: "0.06em", ...style }}
     >
       {children}
@@ -325,10 +290,10 @@ export function FetaButton({
 }
 
 /* Small caps eyebrow with a rule, used to head every section. */
-export function SectionLabel({ children, tone = FETA.amber }) {
+export function SectionLabel({ children, tone = HABESHA.amber }) {
   return (
     <div className="flex items-center gap-3 mb-3">
-      <span className="feta-eyebrow" style={{ color: tone }}>
+      <span className="habesha-eyebrow" style={{ color: tone }}>
         {children}
       </span>
       <span className="flex-1 h-px" style={{ background: `${tone}55` }} />

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { FaUser, FaLock } from "react-icons/fa";
 import { loginUser } from "../services/authSevice";
-import { FETA, FetaMark, FetaButton, Screen, TibebBand } from "../brand/FetaBrand";
+import { HABESHA, HabeshaMark, HabeshaButton, Screen, TibebBand } from "../brand/HabeshaBrand";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -42,37 +42,37 @@ export default function LoginPage() {
 
   return (
     <Screen>
-      <div className="feta-scroll flex-1 overflow-y-auto flex flex-col">
+      <div className="habesha-scroll flex-1 overflow-y-auto flex flex-col">
         <div className="m-auto w-full px-6 py-10">
           {/* Header */}
           <div className="text-center mb-7">
-            <FetaMark className="w-24 mx-auto drop-shadow-[0_10px_20px_rgba(0,0,0,0.4)]" />
+            <HabeshaMark className="w-24 mx-auto drop-shadow-[0_10px_20px_rgba(0,0,0,0.4)]" />
 
             <h1
-              className="feta-display text-4xl mt-5"
-              style={{ color: FETA.cream, textShadow: `3px 3px 0 ${FETA.ink}` }}
+              className="habesha-display text-4xl mt-5"
+              style={{ color: HABESHA.cream, textShadow: `3px 3px 0 ${HABESHA.ink}` }}
             >
               Sign in
             </h1>
 
-            <p className="am text-lg mt-1" style={{ color: FETA.amber, fontWeight: 600 }}>
-              ከጓደኛ ጋር
+            <p className="am text-lg mt-1" style={{ color: HABESHA.amber, fontWeight: 600 }}>
+              የሚያረካ
             </p>
           </div>
 
           {/* Card — cream panel built with the wordmark keyline */}
           <div
-            className="feta-lockup p-6 pt-5"
-            style={{ background: FETA.cream, color: FETA.ink }}
+            className="habesha-lockup p-6 pt-5"
+            style={{ background: HABESHA.cream, color: HABESHA.ink }}
           >
             <div className="-mx-6 -mt-5 mb-5 overflow-hidden rounded-t-[18px]">
-              <TibebBand height={20} ground={FETA.red} line={FETA.cream} />
+              <TibebBand height={20} ground={HABESHA.field} line={HABESHA.cream} />
             </div>
 
             {/* Username */}
             <label
-              className="feta-eyebrow flex items-center gap-2 mb-2"
-              style={{ color: FETA.redDeep }}
+              className="habesha-eyebrow flex items-center gap-2 mb-2"
+              style={{ color: HABESHA.bronze }}
             >
               <FaUser aria-hidden="true" />
               Username
@@ -87,14 +87,14 @@ export default function LoginPage() {
                 autoCapitalize="none"
                 autoCorrect="off"
                 spellCheck="false"
-                className="feta-field"
+                className="habesha-field"
               />
             </div>
 
             {/* Password */}
             <label
-              className="feta-eyebrow flex items-center gap-2 mb-2"
-              style={{ color: FETA.redDeep }}
+              className="habesha-eyebrow flex items-center gap-2 mb-2"
+              style={{ color: HABESHA.bronze }}
             >
               <FaLock aria-hidden="true" />
               Password
@@ -110,7 +110,7 @@ export default function LoginPage() {
                 autoCorrect="off"
                 spellCheck="false"
                 onKeyDown={(e) => e.key === "Enter" && handleLogin()}
-                className="feta-field"
+                className="habesha-field"
               />
             </div>
 
@@ -118,9 +118,9 @@ export default function LoginPage() {
               <div
                 className="rounded-xl px-4 py-3 mb-5 text-sm font-semibold"
                 style={{
-                  background: `${FETA.red}18`,
-                  color: FETA.redDeep,
-                  boxShadow: `0 0 0 2px ${FETA.red}`,
+                  background: `${HABESHA.field}18`,
+                  color: HABESHA.bronze,
+                  boxShadow: `0 0 0 2px ${HABESHA.field}`,
                 }}
                 role="alert"
               >
@@ -128,7 +128,7 @@ export default function LoginPage() {
               </div>
             )}
 
-            <FetaButton
+            <HabeshaButton
               onClick={handleLogin}
               disabled={loading}
               variant="gold"
@@ -139,8 +139,8 @@ export default function LoginPage() {
                   <span
                     className="w-4 h-4 rounded-full animate-spin"
                     style={{
-                      border: `3px solid ${FETA.ink}44`,
-                      borderTopColor: FETA.ink,
+                      border: `3px solid ${HABESHA.ink}44`,
+                      borderTopColor: HABESHA.ink,
                     }}
                   />
                   Signing in…
@@ -148,14 +148,14 @@ export default function LoginPage() {
               ) : (
                 "Sign in"
               )}
-            </FetaButton>
+            </HabeshaButton>
           </div>
 
           <p
-            className="feta-eyebrow text-center mt-7"
-            style={{ color: `${FETA.cream}80` }}
+            className="habesha-eyebrow text-center mt-7"
+            style={{ color: `${HABESHA.cream}80` }}
           >
-            Feta Trade Activation · 21+
+            Habesha Trade Activation · 21+
           </p>
         </div>
       </div>

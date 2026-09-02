@@ -4,12 +4,12 @@ import { API_URL } from "../config";
 import { getWinMessage, fillTemplate } from "../services/settingsService";
 import { useAuth } from "../context/AuthContext";
 import {
-  FETA,
-  FetaMark,
-  FetaButton,
-  Sunburst,
+  HABESHA,
+  HabeshaMark,
+  HabeshaButton,
+  TibebWash,
   TibebBand,
-} from "../brand/FetaBrand";
+} from "../brand/HabeshaBrand";
 
 export default function WinnerRegistrationPage() {
   const navigate = useNavigate();
@@ -99,7 +99,7 @@ export default function WinnerRegistrationPage() {
 
   const field = (label, node) => (
     <div>
-      <label className="feta-eyebrow block mb-2" style={{ color: FETA.amber }}>
+      <label className="habesha-eyebrow block mb-2" style={{ color: HABESHA.amber }}>
         {label}
       </label>
       {node}
@@ -110,12 +110,11 @@ export default function WinnerRegistrationPage() {
     <div
       className="relative h-[100dvh] max-w-md mx-auto overflow-hidden flex flex-col"
       style={{
-        background: `radial-gradient(110% 60% at 50% 0%, ${FETA.red} 0%, ${FETA.redDeep} 55%, ${FETA.redDark} 100%)`,
-        color: FETA.cream,
+        background: `radial-gradient(110% 60% at 50% 0%, ${HABESHA.field} 0%, ${HABESHA.bronze} 55%, ${HABESHA.inkDeep} 100%)`,
+        color: HABESHA.cream,
       }}
     >
-      <Sunburst
-        rays={72}
+      <TibebWash
         opacity={0.3}
         className="absolute pointer-events-none"
         style={{
@@ -135,11 +134,11 @@ export default function WinnerRegistrationPage() {
         <button
           onClick={() => navigate(`/spin/${outletId}`, { state: { outlet } })}
           aria-label="Back to the wheel"
-          className="feta-press absolute left-6 top-7 w-10 h-10 rounded-xl flex items-center justify-center"
+          className="habesha-press absolute left-6 top-7 w-10 h-10 rounded-xl flex items-center justify-center"
           style={{
-            background: FETA.cream,
-            color: FETA.ink,
-            boxShadow: `0 0 0 2px ${FETA.gold}, 0 0 0 4px ${FETA.ink}`,
+            background: HABESHA.cream,
+            color: HABESHA.ink,
+            boxShadow: `0 0 0 2px ${HABESHA.gold}, 0 0 0 4px ${HABESHA.ink}`,
             fontSize: 18,
             fontWeight: 900,
             lineHeight: 1,
@@ -148,32 +147,32 @@ export default function WinnerRegistrationPage() {
           ←
         </button>
 
-        <FetaMark className="w-16 mb-3 drop-shadow-[0_8px_18px_rgba(0,0,0,0.45)]" />
+        <HabeshaMark className="w-16 mb-3 drop-shadow-[0_8px_18px_rgba(0,0,0,0.45)]" />
 
-        <p className="feta-eyebrow" style={{ color: FETA.amber }}>
+        <p className="habesha-eyebrow" style={{ color: HABESHA.amber }}>
           🎉 Winner
         </p>
         <h1
-          className="feta-display text-3xl mt-2"
+          className="habesha-display text-3xl mt-2"
           style={{
-            color: FETA.cream,
-            textShadow: `3px 3px 0 ${FETA.ink}, 6px 6px 0 ${FETA.gold}`,
+            color: HABESHA.cream,
+            textShadow: `3px 3px 0 ${HABESHA.ink}, 6px 6px 0 ${HABESHA.gold}`,
           }}
         >
           {fillTemplate(winMessage, prize || "a prize")}
         </h1>
         <div className="w-32 mt-4">
-          <TibebBand height={16} tiles={8} ground={FETA.amber} line={FETA.redDeep} />
+          <TibebBand height={16} tiles={8} ground={HABESHA.amber} line={HABESHA.bronze} />
         </div>
       </div>
 
       {/* Form */}
-      <div className="feta-scroll relative z-10 flex-1 overflow-y-auto px-6 py-5 space-y-4">
+      <div className="habesha-scroll relative z-10 flex-1 overflow-y-auto px-6 py-5 space-y-4">
         {field(
           "Full name",
           <input
             placeholder="As it appears on their ID"
-            className="feta-field"
+            className="habesha-field"
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
             autoComplete="name"
@@ -183,7 +182,7 @@ export default function WinnerRegistrationPage() {
         {field(
           "Gender",
           <select
-            className="feta-field"
+            className="habesha-field"
             value={gender}
             onChange={(e) => setGender(e.target.value)}
           >
@@ -193,7 +192,7 @@ export default function WinnerRegistrationPage() {
           </select>
         )}
 
-        <p className="text-xs font-semibold pt-1" style={{ color: `${FETA.cream}AA` }}>
+        <p className="text-xs font-semibold pt-1" style={{ color: `${HABESHA.cream}AA` }}>
           Prizes go to people aged 21 and over. Check their ID before you confirm.
         </p>
       </div>
@@ -202,12 +201,12 @@ export default function WinnerRegistrationPage() {
       <div
         className="relative z-10 p-6 pt-4 flex-none"
         style={{
-          background: `linear-gradient(to top, ${FETA.redDark} 55%, transparent 100%)`,
+          background: `linear-gradient(to top, ${HABESHA.inkDeep} 55%, transparent 100%)`,
         }}
       >
-        <FetaButton onClick={submit} disabled={loading} className="!text-base">
+        <HabeshaButton onClick={submit} disabled={loading} className="!text-base">
           {loading ? "Saving…" : "Confirm the win →"}
-        </FetaButton>
+        </HabeshaButton>
       </div>
     </div>
   );

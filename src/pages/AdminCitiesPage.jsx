@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import { FETA, FetaButton, Screen, SectionLabel } from "../brand/FetaBrand";
+import { HABESHA, HabeshaButton, Screen, SectionLabel } from "../brand/HabeshaBrand";
 import PageHeader from "../components/PageHeader";
 import { getCities, saveCities } from "../services/cityService";
 
@@ -76,8 +76,8 @@ export default function AdminCitiesPage() {
 
         {notice && (
           <div
-            className="feta-lockup-flat px-4 py-3 mb-4 text-sm font-semibold"
-            style={{ background: FETA.amber, color: FETA.ink }}
+            className="habesha-lockup-flat px-4 py-3 mb-4 text-sm font-semibold"
+            style={{ background: HABESHA.amber, color: HABESHA.ink }}
           >
             {notice}
           </div>
@@ -86,8 +86,8 @@ export default function AdminCitiesPage() {
         {error && (
           <div
             role="alert"
-            className="feta-lockup-flat px-4 py-3 mb-4 text-sm font-semibold"
-            style={{ background: FETA.ink, color: FETA.amber }}
+            className="habesha-lockup-flat px-4 py-3 mb-4 text-sm font-semibold"
+            style={{ background: HABESHA.ink, color: HABESHA.amber }}
           >
             {error}
           </div>
@@ -96,7 +96,7 @@ export default function AdminCitiesPage() {
         {loading ? (
           <p
             className="text-center py-10 text-sm font-semibold"
-            style={{ color: `${FETA.cream}AA` }}
+            style={{ color: `${HABESHA.cream}AA` }}
           >
             Loading cities…
           </p>
@@ -107,8 +107,8 @@ export default function AdminCitiesPage() {
               {cities.map((c, i) => (
                 <div
                   key={i}
-                  className="feta-lockup-flat flex items-center gap-2 px-3 py-2"
-                  style={{ background: FETA.cream }}
+                  className="habesha-lockup-flat flex items-center gap-2 px-3 py-2"
+                  style={{ background: HABESHA.cream }}
                 >
                   <input
                     value={c}
@@ -119,7 +119,7 @@ export default function AdminCitiesPage() {
                       setDirty(true);
                     }}
                     aria-label={`City ${i + 1}`}
-                    className="feta-field !py-2 !text-sm flex-1"
+                    className="habesha-field !py-2 !text-sm flex-1"
                   />
                   <button
                     onClick={() => {
@@ -127,8 +127,8 @@ export default function AdminCitiesPage() {
                       setDirty(true);
                     }}
                     aria-label={`Remove ${c}`}
-                    className="feta-eyebrow px-3 py-2 rounded-md flex-none"
-                    style={{ background: FETA.red, color: FETA.cream }}
+                    className="habesha-eyebrow px-3 py-2 rounded-md flex-none"
+                    style={{ background: HABESHA.field, color: HABESHA.cream }}
                   >
                     Remove
                   </button>
@@ -142,15 +142,15 @@ export default function AdminCitiesPage() {
                 onChange={(e) => setNewCity(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && add()}
                 placeholder="Add a city"
-                className="feta-field flex-1"
+                className="habesha-field flex-1"
               />
               <button
                 onClick={add}
-                className="feta-press feta-display px-5 rounded-xl flex-none text-xs"
+                className="habesha-press habesha-display px-5 rounded-xl flex-none text-xs"
                 style={{
-                  background: FETA.amber,
-                  color: FETA.ink,
-                  boxShadow: `0 0 0 2px ${FETA.gold}, 0 0 0 4px ${FETA.ink}`,
+                  background: HABESHA.amber,
+                  color: HABESHA.ink,
+                  boxShadow: `0 0 0 2px ${HABESHA.gold}, 0 0 0 4px ${HABESHA.ink}`,
                 }}
               >
                 Add
@@ -165,11 +165,11 @@ export default function AdminCitiesPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder={`Confirm as ${user?.username || "you"}`}
                 autoComplete="current-password"
-                className="feta-field mb-4"
+                className="habesha-field mb-4"
               />
-              <FetaButton onClick={publish} disabled={saving} className="!text-base">
+              <HabeshaButton onClick={publish} disabled={saving} className="!text-base">
                 {saving ? "Publishing…" : dirty ? "Publish changes" : "Published"}
-              </FetaButton>
+              </HabeshaButton>
             </div>
           </>
         )}

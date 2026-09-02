@@ -7,11 +7,11 @@ import { isAdmin } from "../components/AdminRoute";
 import { pingPresence } from "../services/statsService";
 import CampaignTagline from "../components/CampaignTagline";
 import {
-  FETA,
-  FetaMark,
+  HABESHA,
+  HabeshaMark,
   Screen,
   SectionLabel,
-} from "../brand/FetaBrand";
+} from "../brand/HabeshaBrand";
 
 export default function HomePage() {
   const [outlets, setOutlets] = useState([]);
@@ -74,14 +74,14 @@ export default function HomePage() {
       <div className="flex flex-col flex-1 px-5 pt-8 pb-8">
         {/* Header */}
         <div className="flex justify-between items-center mb-7">
-          <FetaMark className="w-14 drop-shadow-[0_6px_14px_rgba(0,0,0,0.4)]" />
+          <HabeshaMark className="w-14 drop-shadow-[0_6px_14px_rgba(0,0,0,0.4)]" />
           <div className="text-right">
-            <p className="feta-eyebrow" style={{ color: `${FETA.cream}99` }}>
+            <p className="habesha-eyebrow" style={{ color: `${HABESHA.cream}99` }}>
               Signed in as
             </p>
             <h2
-              className="feta-display text-lg mt-1"
-              style={{ color: FETA.amber }}
+              className="habesha-display text-lg mt-1"
+              style={{ color: HABESHA.amber }}
             >
               {user?.username}
             </h2>
@@ -91,8 +91,8 @@ export default function HomePage() {
         {/* Greeting */}
         <div className="mb-8">
           <h1
-            className="feta-display text-4xl"
-            style={{ color: FETA.cream, textShadow: `3px 3px 0 ${FETA.ink}` }}
+            className="habesha-display text-4xl"
+            style={{ color: HABESHA.cream, textShadow: `3px 3px 0 ${HABESHA.ink}` }}
           >
             Welcome
             <br />
@@ -108,7 +108,7 @@ export default function HomePage() {
           {!isAdmin(user) && loading && (
             <p
               className="text-center py-6 text-sm font-semibold"
-              style={{ color: `${FETA.cream}99` }}
+              style={{ color: `${HABESHA.cream}99` }}
             >
               Loading outlets…
             </p>
@@ -116,13 +116,13 @@ export default function HomePage() {
 
           {!isAdmin(user) && !loading && outlets.length === 0 && (
             <div
-              className="feta-lockup-flat text-center py-7 px-5"
-              style={{ background: `${FETA.redDark}CC` }}
+              className="habesha-lockup-flat text-center py-7 px-5"
+              style={{ background: `${HABESHA.inkDeep}CC` }}
             >
-              <p className="feta-display text-base" style={{ color: FETA.cream }}>
+              <p className="habesha-display text-base" style={{ color: HABESHA.cream }}>
                 No outlets yet
               </p>
-              <p className="text-sm mt-2" style={{ color: FETA.amber }}>
+              <p className="text-sm mt-2" style={{ color: HABESHA.amber }}>
                 Add your first outlet to start a campaign.
               </p>
             </div>
@@ -133,7 +133,7 @@ export default function HomePage() {
               outlets a BA has registered. */}
           {!isAdmin(user) && outlets.length > 0 && (
           <div
-            className="feta-scroll overflow-y-auto space-y-4 -mx-2 pl-2 pr-3 py-1"
+            className="habesha-scroll overflow-y-auto space-y-4 -mx-2 pl-2 pr-3 py-1"
             style={{
               maxHeight: "23rem",
               overscrollBehavior: "contain",
@@ -143,25 +143,25 @@ export default function HomePage() {
             <button
               key={outlet.id}
               onClick={() => openOutlet(outlet)}
-              className="feta-lockup-sm feta-press w-full text-left p-4 flex items-center gap-4"
-              style={{ background: FETA.cream, color: FETA.ink }}
+              className="habesha-lockup-sm habesha-press w-full text-left p-4 flex items-center gap-4"
+              style={{ background: HABESHA.cream, color: HABESHA.ink }}
             >
               <span
                 className="w-11 h-11 rounded-xl flex items-center justify-center flex-none"
-                style={{ background: FETA.red, color: FETA.cream }}
+                style={{ background: HABESHA.field, color: HABESHA.cream }}
               >
                 <FaStore />
               </span>
               <span className="min-w-0">
                 <span
-                  className="feta-display text-base block truncate"
-                  style={{ color: FETA.ink }}
+                  className="habesha-display text-base block truncate"
+                  style={{ color: HABESHA.ink }}
                 >
                   {outlet.name}
                 </span>
                 <span
                   className="text-sm font-semibold block truncate"
-                  style={{ color: FETA.redDeep }}
+                  style={{ color: HABESHA.bronze }}
                 >
                   {outlet.city}
                 </span>
@@ -175,15 +175,15 @@ export default function HomePage() {
           {!isAdmin(user) && (
           <button
             onClick={() => navigate("/add-outlet")}
-            className="feta-press w-full rounded-2xl p-5 text-center"
+            className="habesha-press w-full rounded-2xl p-5 text-center"
             style={{
               background: "transparent",
-              border: `3px dashed ${FETA.amber}`,
-              color: FETA.amber,
+              border: `3px dashed ${HABESHA.amber}`,
+              color: HABESHA.amber,
             }}
           >
             <FaPlus className="mx-auto text-xl mb-2" />
-            <span className="feta-display text-base block">Add an outlet</span>
+            <span className="habesha-display text-base block">Add an outlet</span>
             <span className="text-xs font-semibold block mt-1 opacity-80">
               Register a new shop or bar
             </span>
@@ -235,27 +235,27 @@ export default function HomePage() {
                 <button
                   key={item.to}
                   onClick={() => navigate(item.to)}
-                  className="feta-lockup-sm feta-press w-full p-4 flex items-center gap-4 text-left"
-                  style={{ background: FETA.amber, color: FETA.ink }}
+                  className="habesha-lockup-sm habesha-press w-full p-4 flex items-center gap-4 text-left"
+                  style={{ background: HABESHA.amber, color: HABESHA.ink }}
                 >
                   <span
                     className="w-11 h-11 rounded-xl flex items-center justify-center flex-none"
-                    style={{ background: FETA.ink, fontSize: 19 }}
+                    style={{ background: HABESHA.ink, fontSize: 19 }}
                   >
                     {item.icon}
                   </span>
                   <span className="min-w-0 flex-1">
-                    <span className="feta-display text-sm block">{item.title}</span>
+                    <span className="habesha-display text-sm block">{item.title}</span>
                     <span
                       className="text-xs font-semibold block mt-0.5"
-                      style={{ color: FETA.redDeep }}
+                      style={{ color: HABESHA.bronze }}
                     >
                       {item.blurb}
                     </span>
                   </span>
                   <span
-                    className="feta-display flex-none"
-                    style={{ color: `${FETA.ink}66`, fontSize: 17 }}
+                    className="habesha-display flex-none"
+                    style={{ color: `${HABESHA.ink}66`, fontSize: 17 }}
                   >
                     →
                   </span>
@@ -271,11 +271,11 @@ export default function HomePage() {
             logout();
             navigate("/login");
           }}
-          className="feta-press w-full mt-8 py-3.5 rounded-xl feta-display text-sm"
+          className="habesha-press w-full mt-8 py-3.5 rounded-xl habesha-display text-sm"
           style={{
             background: "transparent",
-            border: `2px solid ${FETA.cream}55`,
-            color: `${FETA.cream}CC`,
+            border: `2px solid ${HABESHA.cream}55`,
+            color: `${HABESHA.cream}CC`,
           }}
         >
           Sign out

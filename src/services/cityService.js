@@ -1,6 +1,6 @@
 import { API_URL } from "../config";
 
-const CACHE_KEY = "feta_cities";
+const CACHE_KEY = "habesha_cities";
 
 export const FALLBACK_CITIES = [
   "Addis Ababa", "Dire Dawa", "Bahir Dar", "Hawassa", "Mekelle",

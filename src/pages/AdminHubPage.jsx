@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { FETA, Screen, SectionLabel } from "../brand/FetaBrand";
+import { HABESHA, Screen, SectionLabel } from "../brand/HabeshaBrand";
 import PageHeader from "../components/PageHeader";
 
 const SECTIONS = [
@@ -49,27 +49,27 @@ export default function AdminHubPage() {
             <button
               key={s.to}
               onClick={() => navigate(s.to)}
-              className="feta-lockup-sm feta-press w-full p-4 flex items-center gap-4 text-left"
-              style={{ background: FETA.cream, color: FETA.ink }}
+              className="habesha-lockup-sm habesha-press w-full p-4 flex items-center gap-4 text-left"
+              style={{ background: HABESHA.cream, color: HABESHA.ink }}
             >
               <span
                 className="w-11 h-11 rounded-xl flex items-center justify-center flex-none"
-                style={{ background: FETA.amber, fontSize: 20 }}
+                style={{ background: HABESHA.amber, fontSize: 20 }}
               >
                 {s.icon}
               </span>
               <span className="min-w-0 flex-1">
-                <span className="feta-display text-sm block">{s.title}</span>
+                <span className="habesha-display text-sm block">{s.title}</span>
                 <span
                   className="text-xs font-semibold block mt-0.5"
-                  style={{ color: `${FETA.ink}99` }}
+                  style={{ color: `${HABESHA.ink}99` }}
                 >
                   {s.blurb}
                 </span>
               </span>
               <span
-                className="feta-display flex-none"
-                style={{ color: `${FETA.ink}55`, fontSize: 18 }}
+                className="habesha-display flex-none"
+                style={{ color: `${HABESHA.ink}55`, fontSize: 18 }}
               >
                 →
               </span>

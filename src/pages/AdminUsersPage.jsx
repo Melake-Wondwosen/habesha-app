@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import { FETA, FetaButton, Screen, SectionLabel } from "../brand/FetaBrand";
+import { HABESHA, HabeshaButton, Screen, SectionLabel } from "../brand/HabeshaBrand";
 import PageHeader from "../components/PageHeader";
 import { getUsers, saveUsers } from "../services/userService";
 
@@ -112,8 +112,8 @@ export default function AdminUsersPage() {
 
         {notice && (
           <div
-            className="feta-lockup-flat px-4 py-3 mb-4 text-sm font-semibold"
-            style={{ background: FETA.amber, color: FETA.ink }}
+            className="habesha-lockup-flat px-4 py-3 mb-4 text-sm font-semibold"
+            style={{ background: HABESHA.amber, color: HABESHA.ink }}
           >
             {notice}
           </div>
@@ -122,8 +122,8 @@ export default function AdminUsersPage() {
         {error && (
           <div
             role="alert"
-            className="feta-lockup-flat px-4 py-3 mb-4 text-sm font-semibold"
-            style={{ background: FETA.ink, color: FETA.amber }}
+            className="habesha-lockup-flat px-4 py-3 mb-4 text-sm font-semibold"
+            style={{ background: HABESHA.ink, color: HABESHA.amber }}
           >
             {error}
           </div>
@@ -134,7 +134,7 @@ export default function AdminUsersPage() {
             <SectionLabel>Confirm it's you</SectionLabel>
             <p
               className="text-xs font-semibold mb-3"
-              style={{ color: `${FETA.cream}99` }}
+              style={{ color: `${HABESHA.cream}99` }}
             >
               This screen shows every account's password, so it asks for yours
               first.
@@ -146,11 +146,11 @@ export default function AdminUsersPage() {
               onKeyDown={(e) => e.key === "Enter" && unlock()}
               placeholder={`Password for ${user?.username || "you"}`}
               autoComplete="current-password"
-              className="feta-field mb-4"
+              className="habesha-field mb-4"
             />
-            <FetaButton onClick={unlock} disabled={busy} className="!text-base">
+            <HabeshaButton onClick={unlock} disabled={busy} className="!text-base">
               {busy ? "Checking…" : "Unlock"}
-            </FetaButton>
+            </HabeshaButton>
           </>
         ) : (
           <>
@@ -159,15 +159,15 @@ export default function AdminUsersPage() {
               {users.map((u, i) => (
                 <div
                   key={i}
-                  className="feta-lockup-flat p-4"
-                  style={{ background: FETA.cream, color: FETA.ink }}
+                  className="habesha-lockup-flat p-4"
+                  style={{ background: HABESHA.cream, color: HABESHA.ink }}
                 >
                   <input
                     value={u.name}
                     onChange={(e) => update(i, { name: e.target.value })}
                     placeholder="Full name"
                     aria-label="Full name"
-                    className="feta-field !py-2 !text-sm mb-2"
+                    className="habesha-field !py-2 !text-sm mb-2"
                   />
 
                   <div className="flex gap-2 mb-2">
@@ -176,7 +176,7 @@ export default function AdminUsersPage() {
                       onChange={(e) => update(i, { username: e.target.value })}
                       placeholder="Username"
                       aria-label="Username"
-                      className="feta-field !py-2 !text-sm flex-1"
+                      className="habesha-field !py-2 !text-sm flex-1"
                     />
                     <div className="flex-1 flex gap-1">
                       <input
@@ -185,15 +185,15 @@ export default function AdminUsersPage() {
                         onChange={(e) => update(i, { password: e.target.value })}
                         placeholder="Password"
                         aria-label="Password"
-                        className="feta-field !py-2 !text-sm flex-1"
+                        className="habesha-field !py-2 !text-sm flex-1"
                       />
                       <button
                         onClick={() =>
                           setReveal((r) => ({ ...r, [i]: !r[i] }))
                         }
                         aria-label={reveal[i] ? "Hide password" : "Show password"}
-                        className="feta-eyebrow px-2 rounded-md flex-none"
-                        style={{ background: `${FETA.ink}12`, color: FETA.ink }}
+                        className="habesha-eyebrow px-2 rounded-md flex-none"
+                        style={{ background: `${HABESHA.ink}12`, color: HABESHA.ink }}
                       >
                         {reveal[i] ? "Hide" : "Show"}
                       </button>
@@ -205,7 +205,7 @@ export default function AdminUsersPage() {
                       value={u.role}
                       onChange={(e) => update(i, { role: e.target.value })}
                       aria-label="Role"
-                      className="feta-field !py-2 !text-sm flex-1"
+                      className="habesha-field !py-2 !text-sm flex-1"
                     >
                       {ROLES.map((r) => (
                         <option key={r.value} value={r.value}>
@@ -218,17 +218,17 @@ export default function AdminUsersPage() {
                       onChange={(e) => update(i, { region: e.target.value })}
                       placeholder="Division"
                       aria-label="Division"
-                      className="feta-field !py-2 !text-sm flex-1"
+                      className="habesha-field !py-2 !text-sm flex-1"
                     />
                   </div>
 
                   <div className="flex items-center gap-3 mt-3">
                     <button
                       onClick={() => update(i, { canPublish: !u.canPublish })}
-                      className="feta-eyebrow px-3 py-2 rounded-md"
+                      className="habesha-eyebrow px-3 py-2 rounded-md"
                       style={{
-                        background: u.canPublish ? FETA.red : `${FETA.ink}12`,
-                        color: u.canPublish ? FETA.cream : FETA.ink,
+                        background: u.canPublish ? HABESHA.field : `${HABESHA.ink}12`,
+                        color: u.canPublish ? HABESHA.cream : HABESHA.ink,
                       }}
                     >
                       {u.canPublish ? "★ Can publish" : "Can't publish"}
@@ -239,8 +239,8 @@ export default function AdminUsersPage() {
                         setUsers(users.filter((_, idx) => idx !== i));
                         setDirty(true);
                       }}
-                      className="feta-eyebrow px-3 py-2 rounded-md ml-auto"
-                      style={{ background: FETA.red, color: FETA.cream }}
+                      className="habesha-eyebrow px-3 py-2 rounded-md ml-auto"
+                      style={{ background: HABESHA.field, color: HABESHA.cream }}
                     >
                       Delete
                     </button>
@@ -251,11 +251,11 @@ export default function AdminUsersPage() {
 
             <button
               onClick={addUser}
-              className="feta-press feta-display w-full mt-3 py-3 rounded-xl text-xs"
+              className="habesha-press habesha-display w-full mt-3 py-3 rounded-xl text-xs"
               style={{
-                background: FETA.amber,
-                color: FETA.ink,
-                boxShadow: `0 0 0 2px ${FETA.gold}, 0 0 0 4px ${FETA.ink}`,
+                background: HABESHA.amber,
+                color: HABESHA.ink,
+                boxShadow: `0 0 0 2px ${HABESHA.gold}, 0 0 0 4px ${HABESHA.ink}`,
               }}
             >
               + Add an account
@@ -263,9 +263,9 @@ export default function AdminUsersPage() {
 
             <div className="mt-8">
               <SectionLabel>Save</SectionLabel>
-              <FetaButton onClick={publish} disabled={busy} className="!text-base">
+              <HabeshaButton onClick={publish} disabled={busy} className="!text-base">
                 {busy ? "Saving…" : dirty ? "Save changes" : "Saved"}
-              </FetaButton>
+              </HabeshaButton>
             </div>
           </>
         )}
