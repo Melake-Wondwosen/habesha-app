@@ -4,7 +4,8 @@
    "Anyone" → paste the URL ending in /exec here.
 
    Everything in src/services/ imports from this one place. */
-export const API_URL = "PASTE_YOUR_HABESHA_APPS_SCRIPT_EXEC_URL_HERE";
+export const API_URL =
+  "https://script.google.com/macros/s/AKfycbzMfZO_oJrEbg2wZVz38Kq509UDObFCecTXIU8zO9i1rh9aNobb3iiBXwW4CtLaLW5_Yw/exec";
 
 /* A placeholder resolves as a *relative* URL, so the request quietly
    comes back as the app's own index.html and every caller dies on
