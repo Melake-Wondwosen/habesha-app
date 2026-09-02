@@ -59,7 +59,8 @@ Sheet:
 https://docs.google.com/spreadsheets/d/1c79mDNHJStKA6IJIF0-VO50vnMxeszSKT4R9JIQltAU/edit
 
 1. Open it → Extensions → Apps Script
-2. Paste in all of `apps-script/Code.gs` and `apps-script/prizes.gs`, save
+2. Paste in all of `apps-script/Code.gs`, replacing the default
+   `myFunction` stub, and save. That one file is the whole backend.
 3. Reload the sheet, then: **Habesha Wheel → Run setup (first time only)**.
    This creates the seven tabs: Users, Outlets, Winners, Prizes,
    Settings, Spins, Cities.
