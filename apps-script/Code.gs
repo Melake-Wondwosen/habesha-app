@@ -65,7 +65,8 @@ function doGet(e) {
   const action = e.parameter.action;
 
   try {
-    if (action === "login") return handleLogin_(e);
+    if (action === "login")
+      return handleLogin_(e.parameter.username, e.parameter.password);
     if (action === "getOutlets") return handleGetOutlets_(e);
     if (action === "getPrizes") return handleGetPrizes_(e);
     if (action === "getCities") return handleGetCities_(e);
@@ -89,6 +90,8 @@ function doPost(e) {
   }
 
   try {
+    if (payload.action === "login")
+      return handleLogin_(payload.username, payload.password);
     if (payload.action === "addOutlet") return handleAddOutlet_(payload);
     if (payload.action === "addWinner") return handleAddWinner_(payload);
     if (payload.action === "savePrizes") return handleSavePrizes_(payload);
@@ -106,9 +109,9 @@ function doPost(e) {
 
 // ─── Login ───────────────────────────────────────────────────────────
 
-function handleLogin_(e) {
-  const username = String(e.parameter.username || "").trim();
-  const password = String(e.parameter.password || "");
+function handleLogin_(rawUsername, rawPassword) {
+  const username = String(rawUsername || "").trim();
+  const password = String(rawPassword || "");
 
   /* BAs type these on phone keyboards in the field, where autocapitalise
      and a stray caps lock cause most failed logins. Both are compared

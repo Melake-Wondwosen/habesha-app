@@ -21,13 +21,17 @@ import { isBottlePrize } from "../services/bottleStock";
    change: swap the glyph for an <img> and everything downstream keeps
    working, since callers only ever ask for "the thing for this name".
    ------------------------------------------------------------------ */
-function glyphFor(name = "") {
-  if (/6\s*-?\s*pack|crate|case/i.test(name)) return FaBoxOpen;
-  if (isBottlePrize(name)) return FaBeer;
-  if (/t[\s-]?shirt|tee\b/i.test(name)) return FaTshirt;
-  if (/\bcap\b|hat/i.test(name)) return FaHatCowboy;
-  if (/opener|key\s*-?\s*chain|keyring/i.test(name)) return FaKey;
-  return FaGift;
+/* Returns the element itself rather than a component to instantiate.
+   Picking a component out of a lookup and rendering <Glyph /> makes
+   React treat it as a brand-new type whenever the branch changes,
+   which throws away the subtree instead of updating it. */
+function renderGlyph(name = "", size) {
+  if (/6\s*-?\s*pack|crate|case/i.test(name)) return <FaBoxOpen size={size} />;
+  if (isBottlePrize(name)) return <FaBeer size={size} />;
+  if (/t[\s-]?shirt|tee\b/i.test(name)) return <FaTshirt size={size} />;
+  if (/\bcap\b|hat/i.test(name)) return <FaHatCowboy size={size} />;
+  if (/opener|key\s*-?\s*chain|keyring/i.test(name)) return <FaKey size={size} />;
+  return <FaGift size={size} />;
 }
 
 export default function PrizeGlyph({
@@ -37,17 +41,13 @@ export default function PrizeGlyph({
   className = "",
   style,
 }) {
-  const Glyph = glyphFor(name);
-
   return (
     <span
       className={`inline-flex items-center justify-center ${className}`}
       style={{ color: tone, ...style }}
       aria-hidden="true"
     >
-      <Glyph size={size} />
+      {renderGlyph(name, size)}
     </span>
   );
 }
-
-export { glyphFor };

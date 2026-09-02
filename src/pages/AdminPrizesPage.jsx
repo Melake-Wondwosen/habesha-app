@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   HABESHA,
-  HabeshaMark,
   HabeshaButton,
   Screen,
   SectionLabel,

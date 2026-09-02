@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../context/AuthContext";
 import { HABESHA, Screen, SectionLabel } from "../brand/HabeshaBrand";
 import PageHeader from "../components/PageHeader";
 import WinCelebration from "../components/WinCelebration";
@@ -9,7 +8,6 @@ import { bottleCost } from "../services/bottleStock";
 import { playClink, playWinChime, playNoWinTone, ensureAudio } from "../services/sounds";
 
 export default function AdminPreviewPage() {
-  const { user } = useAuth();
 
   const [prizes, setPrizes] = useState(readCachedPrizes() || FALLBACK_PRIZES);
   const [winMessage, setWinMessage] = useState(

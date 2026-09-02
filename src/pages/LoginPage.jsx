@@ -33,7 +33,7 @@ export default function LoginPage() {
       } else {
         setError(result.message);
       }
-    } catch (err) {
+    } catch {
       setError("Could not reach the server. Check your connection and try again.");
     } finally {
       setLoading(false);

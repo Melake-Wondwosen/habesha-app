@@ -25,7 +25,8 @@ export async function getOutlets(baId) {
 
   const deviceId = getDeviceId();
   const response = await fetch(
-    `${API_URL}?action=getOutlets&baId=${baId}&deviceId=${deviceId}`
+    `${API_URL}?action=getOutlets&baId=${encodeURIComponent(baId)}` +
+      `&deviceId=${encodeURIComponent(deviceId)}`
   );
   return newestFirst(await response.json());
 }

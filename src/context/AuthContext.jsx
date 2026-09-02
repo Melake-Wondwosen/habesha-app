@@ -35,7 +35,7 @@ export function AuthProvider({ children }) {
   const login = (userData) => {
     /* If a different person used this device last, drop their cached
        outlets and campaigns before the new session starts. */
-    let previous = null;
+    let previous;
     try {
       previous = JSON.parse(localStorage.getItem("user"));
     } catch {
