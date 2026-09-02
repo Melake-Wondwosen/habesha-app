@@ -125,10 +125,13 @@ export default function CampaignSetupPage() {
     <div
       className="relative h-[100dvh] max-w-md mx-auto overflow-hidden flex flex-col"
       style={{
-        background: `radial-gradient(110% 60% at 50% 0%, ${HABESHA.field} 0%, ${HABESHA.bronze} 55%, ${HABESHA.inkDeep} 100%)`,
+        background: HABESHA.inkDeep,
         color: HABESHA.cream,
       }}
     >
+      {/* Same campaign backdrop as the shared Screen shell. */}
+      <div className="habesha-backdrop" aria-hidden="true" />
+
       <TibebWash
         opacity={0.06}
         className="absolute pointer-events-none"

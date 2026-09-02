@@ -775,6 +775,10 @@ select.habesha-field {
 .habesha-backdrop {
   position: sticky;
   top: 0;
+  /* Every shell it sits in is a flex column, where a flex item is
+     shrinkable by default — without this the layer collapses and the
+     photograph never appears. */
+  flex: none;
   height: 100vh;
   height: 100dvh;
   margin-bottom: -100vh;
