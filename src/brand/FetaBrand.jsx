@@ -2,6 +2,7 @@ import { useId } from "react";
 import fetaMark from "../assets/feta-mark.png";
 import fetaLockup from "../assets/feta-logo-lockup.png";
 import fetaPattern from "../assets/feta-pattern-white.png";
+import adeyFlower from "../assets/habesha-flower.png";
 
 export const FETA = {
   red: "#B4222C",
@@ -192,6 +193,49 @@ export function TibebField({ opacity = 0.14, className = "", style }) {
   );
 }
 
+/* ------------------------------------------------------------------
+   Adey Abeba — the new year daisy. Deliberately sparse: four small
+   blooms tucked into the corners at low opacity, enough to mark the
+   season without turning every screen into a greeting card.
+
+   Fixed positions rather than random ones, so the decoration doesn't
+   shuffle itself around each time a screen re-renders.
+   ------------------------------------------------------------------ */
+const BLOOMS = [
+  { top: "7%", left: "-3%", size: 46, rotate: -18, opacity: 0.16 },
+  { top: "24%", right: "-4%", size: 62, rotate: 24, opacity: 0.12 },
+  { bottom: "22%", left: "-5%", size: 54, rotate: 12, opacity: 0.13 },
+  { bottom: "6%", right: "2%", size: 38, rotate: -30, opacity: 0.18 },
+];
+
+export function AdeyScatter({ blooms = BLOOMS, className = "" }) {
+  return (
+    <div
+      aria-hidden="true"
+      className={`absolute inset-0 overflow-hidden pointer-events-none ${className}`}
+    >
+      {blooms.map((b, i) => {
+        const { size, rotate, opacity, ...pos } = b;
+        return (
+          <img
+            key={i}
+            src={adeyFlower}
+            alt=""
+            style={{
+              position: "absolute",
+              width: size,
+              height: size,
+              opacity,
+              transform: `rotate(${rotate}deg)`,
+              ...pos,
+            }}
+          />
+        );
+      })}
+    </div>
+  );
+}
+
 /* The full artwork: three friends, fist bump, wordmark. Hero use only. */
 export function FetaLockup({ className = "", alt = "Feta", style }) {
   return <img src={fetaLockup} alt={alt} className={className} style={style} />;
@@ -233,6 +277,8 @@ export function Screen({ children, rays = true, trim = true, fullWidth = false }
           }}
         />
       )}
+
+      <AdeyScatter />
 
       {trim && (
         <div className="absolute inset-x-0 top-0 z-20 pointer-events-none">

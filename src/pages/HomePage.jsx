@@ -5,6 +5,7 @@ import { FaPlus, FaStore } from "react-icons/fa";
 import { getOutlets, newestFirst } from "../services/outletService";
 import { isAdmin } from "../components/AdminRoute";
 import { pingPresence } from "../services/statsService";
+import CampaignTagline from "../components/CampaignTagline";
 import {
   FETA,
   FetaMark,
@@ -97,9 +98,8 @@ export default function HomePage() {
             <br />
             back
           </h1>
-          <p className="am text-lg mt-2" style={{ color: FETA.amber, fontWeight: 600 }}>
-            ከጓደኛ ጋር
-          </p>
+          {/* A different campaign line every sign-in. */}
+          <CampaignTagline className="mt-4" style={{ maxWidth: "22rem" }} />
         </div>
 
         {!isAdmin(user) && <SectionLabel>My outlets</SectionLabel>}
