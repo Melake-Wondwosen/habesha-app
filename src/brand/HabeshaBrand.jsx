@@ -167,10 +167,10 @@ export function TibebField({ opacity = 0.12, className = "", style }) {
    shuffle itself around each time a screen re-renders.
    ------------------------------------------------------------------ */
 const BLOOMS = [
-  { top: "7%", left: "-3%", size: 46, rotate: -18, opacity: 0.16 },
-  { top: "24%", right: "-4%", size: 62, rotate: 24, opacity: 0.12 },
-  { bottom: "22%", left: "-5%", size: 54, rotate: 12, opacity: 0.13 },
-  { bottom: "6%", right: "2%", size: 38, rotate: -30, opacity: 0.18 },
+  { top: "6%", left: "-4%", size: 74, rotate: -18, opacity: 0.62 },
+  { top: "23%", right: "-5%", size: 96, rotate: 24, opacity: 0.5 },
+  { bottom: "21%", left: "-6%", size: 84, rotate: 12, opacity: 0.54 },
+  { bottom: "5%", right: "1%", size: 60, rotate: -30, opacity: 0.68 },
 ];
 
 export function AdeyScatter({ blooms = BLOOMS, className = "" }) {
@@ -222,7 +222,7 @@ export function Screen({ children, rays = true, trim = true, fullWidth = false }
         /* Transparent apart from a soft vignette — the campaign
            photograph and its scrim live on the body, behind this. */
         background:
-          "radial-gradient(120% 80% at 50% 0%, rgba(35,31,32,0.35) 0%, rgba(11,8,8,0.55) 100%)",
+          "radial-gradient(120% 85% at 50% 0%, rgba(35,31,32,0.16) 0%, rgba(11,8,8,0.34) 100%)",
       }}
     >
       {rays && (

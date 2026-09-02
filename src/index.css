@@ -757,14 +757,17 @@ select.habesha-field {
    Campaign backdrop
    The photograph is bright and busy, and the app puts cream text
    and translucent panels straight on top of it. The scrim is what
-   keeps that readable: at 0.78 the worst pixel in the frame still
-   gives cream text 8.5:1, comfortably past AA.
+   keeps that readable.
 
-   Tune --habesha-scrim to taste. Below about 0.6 the text starts
-   failing contrast over the bright patch behind the table.
+   0.50 is the lightest this goes while the worst pixel in the frame
+   — the lit wall behind the table — still clears AA for cream text,
+   once the Screen vignette is counted on top. Measured at 4.9:1.
+   Lifting it further starts failing that patch, so if you want the
+   photo brighter still, the honest fix is retouching the plate to
+   knock that highlight back, not raising this number.
    ============================================================ */
 :root {
-  --habesha-scrim: 0.78;
+  --habesha-scrim: 0.5;
 }
 
 body::before {
@@ -786,8 +789,8 @@ body::after {
   background:
     linear-gradient(
       to bottom,
-      rgba(11, 8, 8, calc(var(--habesha-scrim) + 0.12)) 0%,
+      rgba(11, 8, 8, calc(var(--habesha-scrim) + 0.14)) 0%,
       rgba(20, 16, 15, var(--habesha-scrim)) 38%,
-      rgba(11, 8, 8, calc(var(--habesha-scrim) + 0.08)) 100%
+      rgba(11, 8, 8, calc(var(--habesha-scrim) + 0.10)) 100%
     );
 }
