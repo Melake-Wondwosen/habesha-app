@@ -89,17 +89,17 @@ export default function HomePage() {
         </div>
 
         {/* Greeting */}
-        <div className="mb-8">
+        <div className="mb-6">
           <h1
-            className="habesha-display text-4xl"
+            className="habesha-display text-3xl whitespace-nowrap"
             style={{ color: HABESHA.cream, textShadow: `3px 3px 0 ${HABESHA.ink}` }}
           >
-            Welcome
-            <br />
-            back
+            Welcome back
           </h1>
-          {/* A different campaign line every sign-in. */}
-          <CampaignTagline className="mt-4" style={{ maxWidth: "22rem" }} />
+          {/* A different campaign line every sign-in. Held tight to the
+              heading — the artwork carries its own generous margins, so
+              anything more than a hair here reads as a gap. */}
+          <CampaignTagline className="-mt-1" style={{ maxWidth: "17rem" }} />
         </div>
 
         {!isAdmin(user) && <SectionLabel>My outlets</SectionLabel>}
