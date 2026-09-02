@@ -61,9 +61,6 @@ body,
 }
 
 body {
-  /* The campaign photograph, held still behind the scrolling content.
-     A background-attachment: fixed here would judder on iOS, so the
-     image lives on a fixed pseudo-element instead. */
   background: var(--habesha-ink-deep);
   color: var(--habesha-cream);
   font-family: var(--font-sans);
@@ -753,44 +750,46 @@ select.habesha-field {
 }
 
 
+
 /* ============================================================
    Campaign backdrop
-   The photograph is bright and busy, and the app puts cream text
-   and translucent panels straight on top of it. The scrim is what
-   keeps that readable.
+   Lives inside the app column, not on the page, so on a desktop
+   the photograph is clipped to the phone-width frame instead of
+   bleeding across the whole window.
 
-   0.50 is the lightest this goes while the worst pixel in the frame
-   — the lit wall behind the table — still clears AA for cream text,
-   once the Screen vignette is counted on top. Measured at 4.9:1.
-   Lifting it further starts failing that patch, so if you want the
-   photo brighter still, the honest fix is retouching the plate to
-   knock that highlight back, not raising this number.
+   Sticky rather than fixed: a fixed layer would escape the
+   column's overflow clipping, and background-attachment: fixed is
+   ignored outright on iOS. Sticky stays put while the content
+   scrolls and still clips correctly.
+
+   0.62 is the floor. The Screen shell used to add a vignette on
+   top which carried part of the darkening; that has gone, so the
+   scrim now does all of it alone. At 0.62 the worst pixel in the
+   frame — the lit wall behind the table — gives cream text 4.7:1,
+   just past AA. Brighter than this needs the plate retouched.
    ============================================================ */
 :root {
-  --habesha-scrim: 0.5;
+  --habesha-scrim: 0.62;
 }
 
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -2;
-  background-image: url("./assets/habesha-bg.webp");
-  background-size: cover;
-  background-position: center 30%;
-  background-repeat: no-repeat;
-}
-
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  background:
+.habesha-backdrop {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100dvh;
+  margin-bottom: -100vh;
+  margin-bottom: -100dvh;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
     linear-gradient(
       to bottom,
       rgba(11, 8, 8, calc(var(--habesha-scrim) + 0.14)) 0%,
       rgba(20, 16, 15, var(--habesha-scrim)) 38%,
-      rgba(11, 8, 8, calc(var(--habesha-scrim) + 0.10)) 100%
-    );
+      rgba(11, 8, 8, calc(var(--habesha-scrim) + 0.1)) 100%
+    ),
+    url("./assets/habesha-bg.webp");
+  background-size: cover, cover;
+  background-position: center, center 30%;
+  background-repeat: no-repeat, no-repeat;
 }

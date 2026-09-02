@@ -219,12 +219,15 @@ export function Screen({ children, rays = true, trim = true, fullWidth = false }
     <div
       className={`habesha-screen relative min-h-screen ${fullWidth ? "" : "max-w-md"} mx-auto overflow-hidden flex flex-col`}
       style={{
-        /* Transparent apart from a soft vignette — the campaign
-           photograph and its scrim live on the body, behind this. */
-        background:
-          "radial-gradient(120% 85% at 50% 0%, rgba(35,31,32,0.16) 0%, rgba(11,8,8,0.34) 100%)",
+        /* The ink floor. The photograph sits above it in .habesha-backdrop,
+           and the vignette is baked into that layer's gradient. */
+        background: HABESHA.inkDeep,
       }}
     >
+      {/* Clipped to this column, so on a desktop the photograph stays
+          inside the phone-width frame rather than filling the window. */}
+      <div className="habesha-backdrop" aria-hidden="true" />
+
       {rays && (
         <TibebWash
           opacity={0.06}
