@@ -249,8 +249,8 @@ select.habesha-field {
     inset 0 2px 0 rgba(255, 255, 255, 0.7),
     inset 0 -3px 6px rgba(72, 10, 14, 0.28),
     /* the panel sits above the poster */
-    0 6px 14px rgba(23, 17, 15, 0.45),
-    0 14px 28px rgba(23, 17, 15, 0.3);
+    0 6px 14px rgba(20, 16, 15, 0.45),
+    0 14px 28px rgba(20, 16, 15, 0.3);
   background-image:
     linear-gradient(
       180deg,
@@ -276,7 +276,7 @@ select.habesha-field {
     0 0 0 4px var(--habesha-ink-deep),
     inset 0 3px 8px rgba(72, 10, 14, 0.5),
     inset 0 -1px 0 rgba(255, 255, 255, 0.25),
-    0 1px 2px rgba(23, 17, 15, 0.4);
+    0 1px 2px rgba(20, 16, 15, 0.4);
   background-image: linear-gradient(
     180deg,
     rgba(72, 10, 14, 0.2) 0%,
@@ -311,26 +311,31 @@ select.habesha-field {
 [data-theme="glass"] .habesha-lockup,
 [data-theme="glass"] .habesha-lockup-sm,
 [data-theme="glass"] .habesha-lockup-flat {
-  border-radius: 26px;
-  /* Low enough that the ground genuinely shows through. */
-  background: rgba(255, 244, 228, 0.11) !important;
-  backdrop-filter: blur(30px) saturate(135%);
-  -webkit-backdrop-filter: blur(30px) saturate(135%);
-  border: 1px solid rgba(255, 244, 228, 0.14);
-  /* Light falls from above: the top edge catches, the rest fades. */
-  border-top-color: rgba(255, 244, 228, 0.38);
+  border-radius: 22px;
+  /* Smoked glass, not frosted white. The old fill was 11% cream, which
+     over a photograph left the plate showing straight through the type.
+     0.58 ink keeps cream text at 10.6:1 against the worst pixel in the
+     frame while the photo still reads underneath. */
+  background: rgba(20, 16, 15, 0.58) !important;
+  backdrop-filter: blur(22px) saturate(118%);
+  -webkit-backdrop-filter: blur(22px) saturate(118%);
+  /* A gold hairline rather than a white one — it ties the panels to the
+     tibeb and the mark instead of reading as generic frosted UI. */
+  border: 1px solid rgba(229, 202, 120, 0.16);
+  border-top-color: rgba(240, 231, 127, 0.3);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.22),
-    0 16px 40px -12px rgba(23, 17, 15, 0.5);
+    inset 0 1px 0 rgba(240, 231, 127, 0.12),
+    inset 0 -1px 0 rgba(20, 16, 15, 0.4),
+    0 18px 44px -14px rgba(11, 8, 8, 0.62);
   color: var(--habesha-cream);
 }
 
 /* Anything that was ink-on-cream has to invert to stay legible on
    frost. Amber, gold and red accents are left alone, so the palette
    survives instead of flattening to one colour. */
-[data-theme="glass"] .habesha-lockup [style*="rgb(23, 17, 15)"],
-[data-theme="glass"] .habesha-lockup-sm [style*="rgb(23, 17, 15)"],
-[data-theme="glass"] .habesha-lockup-flat [style*="rgb(23, 17, 15)"],
+[data-theme="glass"] .habesha-lockup [style*="rgb(20, 16, 15)"],
+[data-theme="glass"] .habesha-lockup-sm [style*="rgb(20, 16, 15)"],
+[data-theme="glass"] .habesha-lockup-flat [style*="rgb(20, 16, 15)"],
 [data-theme="glass"] .habesha-lockup,
 [data-theme="glass"] .habesha-lockup-sm,
 [data-theme="glass"] .habesha-lockup-flat {
@@ -339,17 +344,45 @@ select.habesha-field {
 [data-theme="glass"] .habesha-lockup .habesha-display,
 [data-theme="glass"] .habesha-lockup-sm .habesha-display,
 [data-theme="glass"] .habesha-lockup-flat .habesha-display {
-  text-shadow: 0 1px 8px rgba(23, 17, 15, 0.45);
+  text-shadow: 0 1px 10px rgba(11, 8, 8, 0.6);
+}
+
+/* Supporting lines sit in amber, a step down from the cream heading —
+   a tonal hierarchy in the brand rather than a grey one. */
+[data-theme="glass"] .habesha-lockup p,
+[data-theme="glass"] .habesha-lockup-sm p,
+[data-theme="glass"] .habesha-lockup-flat p {
+  color: var(--habesha-amber) !important;
+}
+
+/* Hairline lifts on hover — the only thing that moves. */
+[data-theme="glass"] .habesha-press {
+  transition:
+    border-color 180ms ease,
+    background-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 120ms ease;
+}
+@media (hover: hover) {
+  [data-theme="glass"] .habesha-press:hover:not(:disabled) {
+    border-color: rgba(229, 202, 120, 0.34);
+    background: rgba(20, 16, 15, 0.52) !important;
+  }
 }
 
 /* Amber buttons stay amber — they're the one solid accent. */
-[data-theme="glass"] .habesha-lockup[style*="rgb(251, 177, 92)"],
-[data-theme="glass"] .habesha-lockup-sm[style*="rgb(251, 177, 92)"] {
-  background: rgba(251, 177, 92, 0.85) !important;
-  border-color: rgba(255, 244, 228, 0.45);
+[data-theme="glass"] .habesha-lockup[style*="rgb(229, 202, 120)"],
+[data-theme="glass"] .habesha-lockup-sm[style*="rgb(229, 202, 120)"] {
+  background: linear-gradient(
+    160deg,
+    rgba(240, 231, 127, 0.94) 0%,
+    rgba(229, 202, 120, 0.9) 55%,
+    rgba(208, 172, 99, 0.9) 100%
+  ) !important;
+  border-color: rgba(240, 231, 127, 0.55);
   color: var(--habesha-ink) !important;
 }
-[data-theme="glass"] .habesha-lockup[style*="rgb(251, 177, 92)"] * {
+[data-theme="glass"] .habesha-lockup[style*="rgb(229, 202, 120)"] * {
   color: var(--habesha-ink) !important;
   text-shadow: none;
 }
@@ -357,28 +390,29 @@ select.habesha-field {
 [data-theme="glass"] .habesha-press:active:not(:disabled),
 [data-theme="glass"] .habesha-lockup-sm.habesha-press:active:not(:disabled) {
   transform: scale(0.985);
-  background: rgba(255, 244, 228, 0.2) !important;
+  background: rgba(20, 16, 15, 0.68) !important;
+  border-color: rgba(229, 202, 120, 0.4);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.3),
-    0 6px 18px -8px rgba(23, 17, 15, 0.45);
+    inset 0 1px 0 rgba(240, 231, 127, 0.16),
+    0 6px 18px -8px rgba(11, 8, 8, 0.5);
 }
 
 /* Inputs are darker than their panel, so they read as recessed. */
 [data-theme="glass"] .habesha-field {
   border-radius: 16px;
-  background: rgba(23, 17, 15, 0.26) !important;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 244, 228, 0.16);
+  background: rgba(20, 16, 15, 0.5) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(229, 202, 120, 0.18);
   box-shadow: none;
   color: var(--habesha-cream) !important;
 }
 [data-theme="glass"] .habesha-field::placeholder {
-  color: rgba(255, 244, 228, 0.42);
+  color: rgba(247, 241, 227, 0.42);
 }
 [data-theme="glass"] .habesha-field:focus-visible {
-  border-color: rgba(251, 177, 92, 0.7);
-  box-shadow: 0 0 0 3px rgba(251, 177, 92, 0.22);
+  border-color: rgba(229, 202, 120, 0.7);
+  box-shadow: 0 0 0 3px rgba(229, 202, 120, 0.22);
 }
 [data-theme="glass"] select.habesha-field {
   background-image:
@@ -395,10 +429,10 @@ select.habesha-field {
   letter-spacing: 0.14em;
 }
 [data-theme="glass"] .habesha-scroll {
-  scrollbar-color: rgba(255, 244, 228, 0.3) transparent;
+  scrollbar-color: rgba(247, 241, 227, 0.3) transparent;
 }
 [data-theme="glass"] .habesha-scroll::-webkit-scrollbar-thumb {
-  background: rgba(255, 244, 228, 0.3);
+  background: rgba(247, 241, 227, 0.3);
 }
 
 /* ------------------------------------------------------------
@@ -406,7 +440,7 @@ select.habesha-field {
    ------------------------------------------------------------ */
 .habesha-scroll {
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 244, 228, 0.4) transparent;
+  scrollbar-color: rgba(247, 241, 227, 0.4) transparent;
 }
 
 .habesha-scroll::-webkit-scrollbar {
@@ -416,7 +450,7 @@ select.habesha-field {
   background: transparent;
 }
 .habesha-scroll::-webkit-scrollbar-thumb {
-  background: rgba(255, 244, 228, 0.4);
+  background: rgba(247, 241, 227, 0.4);
   border-radius: 999px;
 }
 .habesha-scroll::-webkit-scrollbar-button {
@@ -652,9 +686,9 @@ select.habesha-field {
 [data-theme="neu"] .habesha-lockup,
 [data-theme="neu"] .habesha-lockup-sm,
 [data-theme="neu"] .habesha-lockup-flat,
-[data-theme="neu"] .habesha-lockup [style*="rgb(255, 244, 228)"],
-[data-theme="neu"] .habesha-lockup-sm [style*="rgb(255, 244, 228)"],
-[data-theme="neu"] .habesha-lockup-flat [style*="rgb(255, 244, 228)"] {
+[data-theme="neu"] .habesha-lockup [style*="rgb(247, 241, 227)"],
+[data-theme="neu"] .habesha-lockup-sm [style*="rgb(247, 241, 227)"],
+[data-theme="neu"] .habesha-lockup-flat [style*="rgb(247, 241, 227)"] {
   color: var(--habesha-ink) !important;
 }
 
@@ -693,7 +727,7 @@ select.habesha-field {
   color: var(--habesha-ink) !important;
 }
 [data-theme="neu"] .habesha-field::placeholder {
-  color: rgba(23, 17, 15, 0.4);
+  color: rgba(20, 16, 15, 0.4);
 }
 [data-theme="neu"] .habesha-field:focus-visible {
   box-shadow:
@@ -723,8 +757,8 @@ select.habesha-field {
 /* Icon chips were solid ink squares — heavy on a soft cream ground,
    and the glyph inside was being forced to ink too, so it vanished.
    They become red tiles with cream glyphs: on-brand and legible. */
-[data-theme="neu"] .habesha-screen span[class*="rounded-xl"][style*="rgb(23, 17, 15)"],
-[data-theme="neu"] .habesha-screen span[class*="rounded-2xl"][style*="rgb(23, 17, 15)"] {
+[data-theme="neu"] .habesha-screen span[class*="rounded-xl"][style*="rgb(20, 16, 15)"],
+[data-theme="neu"] .habesha-screen span[class*="rounded-2xl"][style*="rgb(20, 16, 15)"] {
   background: var(--habesha-bronze) !important;
   color: var(--habesha-cream) !important;
   box-shadow:
@@ -733,20 +767,20 @@ select.habesha-field {
 }
 
 /* Amber call-to-action surfaces read as red-on-cream relief. */
-[data-theme="neu"] .habesha-lockup[style*="rgb(251, 177, 92)"],
-[data-theme="neu"] .habesha-lockup-sm[style*="rgb(251, 177, 92)"] {
+[data-theme="neu"] .habesha-lockup[style*="rgb(229, 202, 120)"],
+[data-theme="neu"] .habesha-lockup-sm[style*="rgb(229, 202, 120)"] {
   background: var(--neu-bg) !important;
 }
-[data-theme="neu"] .habesha-lockup[style*="rgb(251, 177, 92)"] .habesha-display,
-[data-theme="neu"] .habesha-lockup-sm[style*="rgb(251, 177, 92)"] .habesha-display {
+[data-theme="neu"] .habesha-lockup[style*="rgb(229, 202, 120)"] .habesha-display,
+[data-theme="neu"] .habesha-lockup-sm[style*="rgb(229, 202, 120)"] .habesha-display {
   color: var(--habesha-amber) !important;
 }
 
 [data-theme="neu"] .habesha-scroll {
-  scrollbar-color: rgba(255, 244, 228, 0.35) transparent;
+  scrollbar-color: rgba(247, 241, 227, 0.35) transparent;
 }
 [data-theme="neu"] .habesha-scroll::-webkit-scrollbar-thumb {
-  background: rgba(255, 244, 228, 0.35);
+  background: rgba(247, 241, 227, 0.35);
 }
 
 
