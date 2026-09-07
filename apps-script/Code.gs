@@ -69,6 +69,7 @@ function doGet(e) {
       return handleLogin_(e.parameter.username, e.parameter.password);
     if (action === "getOutlets") return handleGetOutlets_(e);
     if (action === "getPrizes") return handleGetPrizes_(e);
+    if (action === "mainGate") return handleMainGate_();
     if (action === "getCities") return handleGetCities_(e);
     if (action === "getUsers") return handleGetUsers_(e);
     if (action === "getSettings") return handleGetSettings_(e);
@@ -95,6 +96,7 @@ function doPost(e) {
     if (payload.action === "addOutlet") return handleAddOutlet_(payload);
     if (payload.action === "addWinner") return handleAddWinner_(payload);
     if (payload.action === "savePrizes") return handleSavePrizes_(payload);
+    if (payload.action === "claimMainSlot") return handleClaimMainSlot_();
     if (payload.action === "saveCities") return handleSaveCities_(payload);
     if (payload.action === "saveUsers") return handleSaveUsers_(payload);
     if (payload.action === "saveSettings") return handleSaveSettings_(payload);
@@ -246,6 +248,99 @@ function handleAddWinner_(payload) {
 
 /* Every spin is logged, win or not — this is what "people reached"
    counts. Winners only tells you who won something. */
+
+/* ------------------------------------------------------------------
+   Main-prize gate.
+
+   A main prize can only be won once per crate of beer moved across the
+   whole campaign — not per outlet, not per BA. The counter therefore
+   has to live here rather than in any device's localStorage, and the
+   claim has to be atomic: two BAs spinning at the same moment must not
+   both be handed the same slot.
+
+   Because the counter starts at zero, no main prize is reachable until
+   the campaign has moved its first 24 bottles. That is what keeps them
+   out of the opening spins.
+   ------------------------------------------------------------------ */
+var SETTING_BOTTLES = "bottlesDispensed";
+var SETTING_MAIN_AWARDED = "mainPrizesAwarded";
+var SETTING_INTERVAL = "mainPrizeInterval";
+var DEFAULT_INTERVAL = 24;
+
+/* How many bottles this prize hands over. Mirrors bottleCost() in
+   src/services/bottleStock.js — the two must agree. */
+function bottleCost_(prizeName) {
+  var name = String(prizeName || "").trim();
+  if (/6\s*-?\s*pack/i.test(name)) return 6;
+  var m = name.match(/^(\d+)\s*bottles?$/i);
+  return m ? Number(m[1]) : 0;
+}
+
+function readSetting_(key, fallback) {
+  var rows = rowsToObjects_(sheet_(SHEET_SETTINGS));
+  for (var i = 0; i < rows.length; i++) {
+    if (String(rows[i].key) === key) {
+      var n = Number(rows[i].value);
+      return isFinite(n) ? n : fallback;
+    }
+  }
+  return fallback;
+}
+
+function writeSetting_(key, value) {
+  var sheet = sheet_(SHEET_SETTINGS);
+  var values = sheet.getDataRange().getValues();
+  for (var r = 1; r < values.length; r++) {
+    if (String(values[r][0]) === key) {
+      sheet.getRange(r + 1, 2).setValue(value);
+      return;
+    }
+  }
+  sheet.appendRow([key, value]);
+}
+
+function mainInterval_() {
+  var n = readSetting_(SETTING_INTERVAL, DEFAULT_INTERVAL);
+  return n > 0 ? n : DEFAULT_INTERVAL;
+}
+
+/* Read-only: how the wheel decides whether to put main prizes on at all. */
+function handleMainGate_() {
+  var bottles = readSetting_(SETTING_BOTTLES, 0);
+  var awarded = readSetting_(SETTING_MAIN_AWARDED, 0);
+  var interval = mainInterval_();
+  return json_({
+    success: true,
+    bottlesDispensed: bottles,
+    mainPrizesAwarded: awarded,
+    interval: interval,
+    unlocked: Math.floor(bottles / interval) > awarded,
+  });
+}
+
+/* Atomic claim. Returns granted:false if the slot went to someone else
+   between the wheel reading the gate and landing on a main prize. */
+function handleClaimMainSlot_() {
+  var lock = LockService.getScriptLock();
+  try {
+    lock.waitLock(10000);
+  } catch (err) {
+    return json_({ success: false, granted: false, message: "Busy, try again." });
+  }
+  try {
+    var bottles = readSetting_(SETTING_BOTTLES, 0);
+    var awarded = readSetting_(SETTING_MAIN_AWARDED, 0);
+    var interval = mainInterval_();
+    if (Math.floor(bottles / interval) <= awarded) {
+      return json_({ success: true, granted: false });
+    }
+    writeSetting_(SETTING_MAIN_AWARDED, awarded + 1);
+    return json_({ success: true, granted: true });
+  } finally {
+    lock.releaseLock();
+  }
+}
+
 function handleLogSpin_(payload) {
   appendByHeader_(sheet_(SHEET_SPINS), {
     id: "SPN-" + Date.now() + "-" + Math.random().toString(36).slice(2, 8),
@@ -255,6 +350,19 @@ function handleLogSpin_(payload) {
     outcome: payload.outcome || "", // main | regular | none
     date: payload.date || new Date().toISOString(),
   });
+
+  var cost = bottleCost_(payload.prize);
+  if (cost > 0) {
+    var lock = LockService.getScriptLock();
+    try {
+      lock.waitLock(10000);
+      writeSetting_(SETTING_BOTTLES, readSetting_(SETTING_BOTTLES, 0) + cost);
+    } catch (err) {
+      /* Counter is best-effort; never fail the spin over it. */
+    } finally {
+      try { lock.releaseLock(); } catch (e) {}
+    }
+  }
   return json_({ success: true });
 }
 

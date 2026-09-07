@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { HABESHA, HabeshaMark, TibebWash, TibebBand } from "../brand/HabeshaBrand";
+import { readMainGate, claimMainSlot } from "../services/mainGateService";
 import { API_URL } from "../config";
 import { getWinMessage, fillTemplate, getSettings } from "../services/settingsService";
 import { logSpin } from "../services/statsService";
@@ -183,7 +184,9 @@ const NO_WIN_COLOR = { bg: HABESHA.inkDeep, fg: "#E9A9AE" };
         label: item.name,
         qty: item.qty,
         tier: item.tier === "main" ? "main" : "regular",
-        weight: item.weight === undefined ? 1 : Number(item.weight),
+        /* Stock is the odds: a prize with 5 left is five times as
+           likely as one with 1, and its chance falls as it runs down. */
+        weight: item.isNoWin ? 0 : Math.max(0, Number(item.qty) || 0),
         startFrac: acc,
         endFrac: acc + frac,
         midFrac: acc + frac / 2,
@@ -199,9 +202,13 @@ const NO_WIN_COLOR = { bg: HABESHA.inkDeep, fg: "#E9A9AE" };
      from each prize's admin-set weight. We pick the winner first, then
      spin so the pointer genuinely lands on that slice — the animation is
      honest about the result, it just isn't uniform across slices. */
-  function pickWeighted(slices) {
+  function pickWeighted(slices, allowMain) {
     const weights = slices.map((sl) => {
       if (sl.isNoWin) return noWinWeight;
+      /* Main prizes are off the table until the campaign has moved
+         another crate. They stay drawn on the wheel — a slice that
+         vanishes tells the customer exactly what they can't win. */
+      if (sl.tier === "main" && !allowMain) return 0;
       const w = Number(sl.weight);
       return isNaN(w) || w < 0 ? 0 : w;
     });
@@ -445,7 +452,7 @@ const NO_WIN_COLOR = { bg: HABESHA.inkDeep, fg: "#E9A9AE" };
 
   const outOfStock = campaign.length > 0 && buildSlices(campaign).length === 0;
 
-  const spin = () => {
+  const spin = async () => {
     if (spinning || campaign.length === 0 || outOfStock) return;
     ensureAudio();
     setSpinning(true);
@@ -455,7 +462,20 @@ const NO_WIN_COLOR = { bg: HABESHA.inkDeep, fg: "#E9A9AE" };
     const slices = buildSlices(campaign);
     lastTickIdxRef.current = sliceIndexAt(slices, wheelDegRef.current);
 
-    const targetIdx = pickWeighted(slices);
+    /* Ask the campaign whether a main prize is owed before drawing.
+       Reading is cheap; claiming is what costs the slot, and that only
+       happens if the draw actually lands on one. */
+    const gate = await readMainGate();
+    let targetIdx = pickWeighted(slices, Boolean(gate.unlocked));
+
+    /* Landing on a main prize is a claim against a campaign-wide
+       allowance. Another BA may have taken it in the last second, in
+       which case re-draw without the main prizes rather than hand out
+       one we can't account for. */
+    if (slices[targetIdx]?.tier === "main") {
+      const granted = await claimMainSlot();
+      if (!granted) targetIdx = pickWeighted(slices, false);
+    }
     const targetDeg = degreesForSlice(slices[targetIdx]);
 
     /* Spin several full turns, then settle on the chosen slice. */

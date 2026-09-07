@@ -100,7 +100,7 @@ export default function AdminPrizesPage() {
       return;
     }
 
-    setPrizes((prev) => [...prev, { name, qty: 5, active: true, tier: "regular", weight: 10 }]);
+    setPrizes((prev) => [...prev, { name, qty: 5, active: true, tier: "regular", weight: 0 }]);
     setNewName("");
     setError("");
     setDirty(true);
@@ -142,20 +142,32 @@ export default function AdminPrizesPage() {
 
   const activeCount = prizes.filter((p) => p.active).length;
 
-  /* Live odds so the weights mean something concrete. Only active
-     prizes compete, and the wheel's built-in "No Win" slice is counted
-     too, so these match what a consumer actually experiences. */
+  /* Stock is the odds. Quantity is the only number set here: a prize
+     with 5 left is five times as likely as one with 1, and its chance
+     falls on its own as it runs down.
+
+     Main prizes are quoted separately because they are gated — they
+     compete only on the spin after the campaign clears another crate,
+     so their share of the regular draw would be a lie. */
   const NO_WIN_WEIGHT = Number(noWinWeight) || 0;
-  const totalWeight =
+  const regularTotal =
     prizes
-      .filter((p) => p.active)
-      .reduce((sum, p) => sum + (Number(p.weight) || 0), 0) + NO_WIN_WEIGHT;
+      .filter((p) => p.active && p.tier !== "main")
+      .reduce((sum, p) => sum + (Number(p.qty) || 0), 0) + NO_WIN_WEIGHT;
+  const mainTotal = prizes
+    .filter((p) => p.active && p.tier === "main")
+    .reduce((sum, p) => sum + (Number(p.qty) || 0), 0);
 
   const oddsFor = (p) => {
     if (!p.active) return "hidden";
-    const w = Number(p.weight) || 0;
-    if (w <= 0) return "never";
-    const pct = (w / totalWeight) * 100;
+    const q = Number(p.qty) || 0;
+    if (q <= 0) return "out of stock";
+    if (p.tier === "main") {
+      if (mainTotal <= 0) return "—";
+      const pct = (q / mainTotal) * 100;
+      return `${Math.round(pct)}% of main`;
+    }
+    const pct = (q / regularTotal) * 100;
     return pct < 1 ? `${pct.toFixed(1)}%` : `${Math.round(pct)}%`;
   };
   const cachedAt = readCacheTime();
@@ -275,19 +287,14 @@ export default function AdminPrizesPage() {
                 <span className="habesha-eyebrow" style={{ color: HABESHA.bronze }}>
                   Chance
                 </span>
-                <input
-                  type="number"
-                  min="0"
-                  value={p.weight}
-                  onChange={(e) => update(i, { weight: e.target.value })}
-                  aria-label={`Chance weight for ${p.name}`}
-                  className="habesha-field w-20 !py-2 text-center"
-                />
                 <span
                   className="text-xs font-bold"
                   style={{ color: HABESHA.bronze }}
                 >
                   {oddsFor(p)}
+                </span>
+                <span className="text-xs" style={{ color: `${HABESHA.ink}88` }}>
+                  from the quantity above
                 </span>
               </div>
 
