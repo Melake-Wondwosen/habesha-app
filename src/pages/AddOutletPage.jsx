@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { getDeviceId } from "../services/deviceId";
 import { getCities, FALLBACK_CITIES } from "../services/cityService";
-import { API_URL } from "../config";
+import { postJson } from "../services/api";
 import {
   HABESHA,
   HabeshaMark,
@@ -124,20 +124,22 @@ export default function AddOutletPage() {
         return;
       }
 
-      const res = await fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "text/plain" },
-        body: JSON.stringify(payload),
-      });
+      const res = await postJson(payload);
 
-      const text = await res.text();
-      const result = JSON.parse(text);
+      if (!res.ok) {
+        /* The work isn't lost — it goes to the offline queue and
+           uploads once the backend is answering properly again. */
+        saveOffline(payload);
+        alert(`${res.message}\n\nThe outlet is saved on this phone and will upload once that's fixed.`);
+        navigate("/home");
+        return;
+      }
 
-      if (result.status === "success") {
+      if (res.data.status === "success") {
         alert("Outlet saved.");
         navigate("/home");
       } else {
-        alert("The server rejected it: " + result.message);
+        alert("The server rejected it: " + res.data.message);
       }
     } catch (err) {
       console.error("Submit error:", err);
@@ -153,19 +155,24 @@ export default function AddOutletPage() {
       if (!navigator.onLine) return;
       if (queue.length === 0) return;
 
+      /* This used to post with mode: "no-cors", which makes the reply
+         opaque — every attempt looked like a success and the queue was
+         cleared regardless. Outlets a BA had walked to and photographed
+         were being dropped silently. Keep whatever didn't land. */
+      const unsent = [];
       for (const item of queue) {
-        try {
-          await fetch(API_URL, {
-            method: "POST",
-            mode: "no-cors",
-            body: JSON.stringify(item),
-          });
-        } catch (err) {
-          console.error("offline sync failed", err);
-          return;
+        const res = await postJson(item);
+        if (!res.ok || res.data?.status !== "success") {
+          console.error("offline sync failed", res.message || res.data?.message);
+          unsent.push(item);
         }
       }
-      localStorage.removeItem("offline_outlets");
+
+      if (unsent.length === 0) {
+        localStorage.removeItem("offline_outlets");
+      } else {
+        localStorage.setItem("offline_outlets", JSON.stringify(unsent));
+      }
     };
 
     window.addEventListener("online", syncOffline);
