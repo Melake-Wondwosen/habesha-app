@@ -4,6 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import { getDeviceId } from "../services/deviceId";
 import { getCities, FALLBACK_CITIES } from "../services/cityService";
 import { postJson } from "../services/api";
+import { UPLOAD_OUTLET_PHOTOS } from "../config";
 import {
   HABESHA,
   HabeshaMark,
@@ -100,8 +101,11 @@ export default function AddOutletPage() {
     setLoading(true);
 
     try {
+      /* The photo is still required above — the BA has to be at the
+         outlet to take it — but it doesn't travel with the record
+         unless uploads are switched back on. */
       let photoBase64 = "";
-      if (photo) {
+      if (photo && UPLOAD_OUTLET_PHOTOS) {
         photoBase64 = await compressImage(photo, 800, 0.7);
       }
 
