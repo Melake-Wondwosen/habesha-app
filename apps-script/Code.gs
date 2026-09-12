@@ -61,7 +61,43 @@ function rowsToObjects_(sheet) {
 
 // ─── Web app entry points ───────────────────────────────────────────
 
+/* ------------------------------------------------------------------
+   Run this one by hand to grant permissions.
+
+   doGet and doPost can't be run from the editor — their `e` argument is
+   the incoming web request, so running them manually throws
+   "Cannot read properties of undefined (reading 'parameter')". That
+   error means nothing is wrong; it just isn't a function you can call
+   without a browser on the other end.
+
+   This touches every service the backend needs, so the consent screen
+   covers all of them in one go: the sheet, Drive for outlet photos, and
+   the lock used by the main-prize gate.
+   ------------------------------------------------------------------ */
+function authorise() {
+  var ss = ss_();
+  var names = ss.getSheets().map(function (sh) { return sh.getName(); });
+
+  var folder = getOrCreateFolder_("Habesha Wheel — Outlet Photos");
+
+  var lock = LockService.getScriptLock();
+  lock.waitLock(5000);
+  lock.releaseLock();
+
+  Logger.log("Authorised. Tabs: " + names.join(", "));
+  Logger.log("Photo folder: " + folder.getName());
+  return "OK";
+}
+
 function doGet(e) {
+  if (!e || !e.parameter) {
+    return json_({
+      success: false,
+      message:
+        "doGet needs a real web request. To grant permissions, run authorise() instead.",
+    });
+  }
+
   const action = e.parameter.action;
 
   try {
@@ -83,6 +119,14 @@ function doGet(e) {
 }
 
 function doPost(e) {
+  if (!e || !e.postData) {
+    return json_({
+      success: false,
+      message:
+        "doPost needs a real web request. To grant permissions, run authorise() instead.",
+    });
+  }
+
   let payload;
   try {
     payload = JSON.parse(e.postData.contents);
