@@ -320,39 +320,49 @@ function bottleCost_(prizeName) {
   return m ? Number(m[1]) : 0;
 }
 
-function readSetting_(key, fallback) {
+/* Counters live in Script Properties, not the Settings sheet. Reading a
+   sheet means pulling and parsing every row; this is a direct key-value
+   fetch and is far quicker — which matters because the spin path hits
+   it on every turn of the wheel.
+
+   mainPrizeInterval is still read from the sheet so you can retune it
+   without touching code, but it is cached for ten minutes rather than
+   re-read on every spin. */
+function readCounter_(key, fallback) {
+  var raw = PropertiesService.getScriptProperties().getProperty(key);
+  if (raw === null || raw === "") return fallback;
+  var n = Number(raw);
+  return isFinite(n) ? n : fallback;
+}
+
+function writeCounter_(key, value) {
+  PropertiesService.getScriptProperties().setProperty(key, String(value));
+}
+
+function mainIntervalCached_() {
+  var cache = CacheService.getScriptCache();
+  var hit = cache.get(SETTING_INTERVAL);
+  if (hit !== null) return Number(hit) || DEFAULT_INTERVAL;
+
   var rows = rowsToObjects_(sheet_(SHEET_SETTINGS));
+  var val = DEFAULT_INTERVAL;
   for (var i = 0; i < rows.length; i++) {
-    if (String(rows[i].key) === key) {
+    if (String(rows[i].key) === SETTING_INTERVAL) {
       var n = Number(rows[i].value);
-      return isFinite(n) ? n : fallback;
+      if (isFinite(n) && n > 0) val = n;
     }
   }
-  return fallback;
+  cache.put(SETTING_INTERVAL, String(val), 600);
+  return val;
 }
 
-function writeSetting_(key, value) {
-  var sheet = sheet_(SHEET_SETTINGS);
-  var values = sheet.getDataRange().getValues();
-  for (var r = 1; r < values.length; r++) {
-    if (String(values[r][0]) === key) {
-      sheet.getRange(r + 1, 2).setValue(value);
-      return;
-    }
-  }
-  sheet.appendRow([key, value]);
-}
 
-function mainInterval_() {
-  var n = readSetting_(SETTING_INTERVAL, DEFAULT_INTERVAL);
-  return n > 0 ? n : DEFAULT_INTERVAL;
-}
 
 /* Read-only: how the wheel decides whether to put main prizes on at all. */
 function handleMainGate_() {
-  var bottles = readSetting_(SETTING_BOTTLES, 0);
-  var awarded = readSetting_(SETTING_MAIN_AWARDED, 0);
-  var interval = mainInterval_();
+  var bottles = readCounter_(SETTING_BOTTLES, 0);
+  var awarded = readCounter_(SETTING_MAIN_AWARDED, 0);
+  var interval = mainIntervalCached_();
   return json_({
     success: true,
     bottlesDispensed: bottles,
@@ -367,18 +377,18 @@ function handleMainGate_() {
 function handleClaimMainSlot_() {
   var lock = LockService.getScriptLock();
   try {
-    lock.waitLock(10000);
+    lock.waitLock(4000);
   } catch (err) {
     return json_({ success: false, granted: false, message: "Busy, try again." });
   }
   try {
-    var bottles = readSetting_(SETTING_BOTTLES, 0);
-    var awarded = readSetting_(SETTING_MAIN_AWARDED, 0);
-    var interval = mainInterval_();
+    var bottles = readCounter_(SETTING_BOTTLES, 0);
+    var awarded = readCounter_(SETTING_MAIN_AWARDED, 0);
+    var interval = mainIntervalCached_();
     if (Math.floor(bottles / interval) <= awarded) {
       return json_({ success: true, granted: false });
     }
-    writeSetting_(SETTING_MAIN_AWARDED, awarded + 1);
+    writeCounter_(SETTING_MAIN_AWARDED, awarded + 1);
     return json_({ success: true, granted: true });
   } finally {
     lock.releaseLock();
@@ -395,16 +405,16 @@ function handleLogSpin_(payload) {
     date: payload.date || new Date().toISOString(),
   });
 
+  /* No lock here. A dropped increment under simultaneous spins costs at
+     worst a slightly late main prize, whereas locking made every BA in
+     the country queue behind every other one. The claim below is the
+     only thing that has to be exact. */
   var cost = bottleCost_(payload.prize);
   if (cost > 0) {
-    var lock = LockService.getScriptLock();
     try {
-      lock.waitLock(10000);
-      writeSetting_(SETTING_BOTTLES, readSetting_(SETTING_BOTTLES, 0) + cost);
+      writeCounter_(SETTING_BOTTLES, readCounter_(SETTING_BOTTLES, 0) + cost);
     } catch (err) {
-      /* Counter is best-effort; never fail the spin over it. */
-    } finally {
-      try { lock.releaseLock(); } catch (e) {}
+      /* Best-effort; never fail the spin over a counter. */
     }
   }
   return json_({ success: true });

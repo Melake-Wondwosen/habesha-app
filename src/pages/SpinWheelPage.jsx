@@ -66,6 +66,9 @@ export default function SpinWheelPage() {
   const [regularWinOverlay, setRegularWinOverlay] = useState(null);
   const [bottlePool, setBottlePool] = useState(() => readPool(id));
   const [noWinWeight, setNoWinWeight] = useState(DEFAULT_NO_WIN_WEIGHT);
+  /* Kept in a ref, not state: the wheel reads it mid-spin and nothing
+     on screen depends on it, so re-rendering over it would be waste. */
+  const mainUnlockedRef = useRef(false);
   const [winMessage, setWinMessage] = useState(
     "Congratulations! You've won {prize} 🎉"
   );
@@ -452,6 +455,23 @@ const NO_WIN_COLOR = { bg: HABESHA.inkDeep, fg: "#E9A9AE" };
 
   const outOfStock = campaign.length > 0 && buildSlices(campaign).length === 0;
 
+  /* Off the critical path: refresh in the background and let the next
+     spin use whatever the latest answer was. */
+  const refreshGate = () => {
+    readMainGate()
+      .then((g) => {
+        mainUnlockedRef.current = Boolean(g.unlocked);
+      })
+      .catch(() => {
+        mainUnlockedRef.current = false;
+      });
+  };
+
+  useEffect(() => {
+    refreshGate();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const spin = async () => {
     if (spinning || campaign.length === 0 || outOfStock) return;
     ensureAudio();
@@ -465,16 +485,21 @@ const NO_WIN_COLOR = { bg: HABESHA.inkDeep, fg: "#E9A9AE" };
     /* Ask the campaign whether a main prize is owed before drawing.
        Reading is cheap; claiming is what costs the slot, and that only
        happens if the draw actually lands on one. */
-    const gate = await readMainGate();
-    let targetIdx = pickWeighted(slices, Boolean(gate.unlocked));
+    /* Already known — fetched when the screen opened and refreshed after
+       each spin, so the wheel moves the moment it is tapped instead of
+       waiting on Apps Script. */
+    let targetIdx = pickWeighted(slices, mainUnlockedRef.current);
 
     /* Landing on a main prize is a claim against a campaign-wide
        allowance. Another BA may have taken it in the last second, in
        which case re-draw without the main prizes rather than hand out
        one we can't account for. */
     if (slices[targetIdx]?.tier === "main") {
+      /* The one call that has to happen before the result is shown —
+         and only on the rare spin that lands on a main prize. */
       const granted = await claimMainSlot();
       if (!granted) targetIdx = pickWeighted(slices, false);
+      mainUnlockedRef.current = false;
     }
     const targetDeg = degreesForSlice(slices[targetIdx]);
 
@@ -519,6 +544,11 @@ const NO_WIN_COLOR = { bg: HABESHA.inkDeep, fg: "#E9A9AE" };
         prize: result.isNoWin ? "" : result.label,
         outcome: result.isNoWin ? "none" : result.tier,
       });
+
+      /* The bottles just logged may have tipped the campaign over the
+         next crate. Find out now, while the BA is reading the result,
+         so the following spin doesn't have to wait. */
+      refreshGate();
 
       if (result.isNoWin) {
         playNoWinTone();
