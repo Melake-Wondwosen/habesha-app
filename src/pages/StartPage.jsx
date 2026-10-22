@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import {
   HABESHA,
   HabeshaMark,
@@ -10,6 +11,7 @@ import {
 
 export default function StartPage() {
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   return (
     <Screen>
@@ -62,7 +64,9 @@ export default function StartPage() {
           </p>
         </div>
 
-        <HabeshaButton onClick={() => navigate("/login")}>Start →</HabeshaButton>
+        <HabeshaButton onClick={() => navigate(user ? "/choose" : "/login")}>
+          Start →
+        </HabeshaButton>
 
         <p
           className="habesha-eyebrow text-center mt-5"
