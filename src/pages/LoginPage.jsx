@@ -29,7 +29,7 @@ export default function LoginPage() {
       if (result.success) {
         login(result.user);
         const role = String(result.user?.role || "").trim().toLowerCase();
-        navigate(role === "manager" ? "/manager" : "/home");
+        navigate(role === "manager" ? "/manager" : "/choose");
       } else {
         setError(result.message);
       }

@@ -3,6 +3,8 @@ import { Routes, Route } from "react-router-dom";
 import StartPage from "../pages/StartPage";
 import LoginPage from "../pages/LoginPage";
 import HomePage from "../pages/HomePage";
+import ChooseActivityPage from "../pages/ChooseActivityPage";
+import SurveyPage from "../pages/SurveyPage";
 import AddOutletPage from "../pages/AddOutletPage";
 import OutletPage from "../pages/OutletPage";
 import SpinWheelPage from "../pages/SpinWheelPage";
@@ -27,6 +29,24 @@ export default function AppRoutes() {
       <Route path="/login" element={<LoginPage />} />
 
       {/* Protected routes (BA must be logged in) */}
+      <Route
+        path="/choose"
+        element={
+          <ProtectedRoute>
+            <ChooseActivityPage />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/survey"
+        element={
+          <ProtectedRoute>
+            <SurveyPage />
+          </ProtectedRoute>
+        }
+      />
+
       <Route
         path="/home"
         element={

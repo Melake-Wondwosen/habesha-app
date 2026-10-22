@@ -838,3 +838,47 @@ select.habesha-field {
   background-position: center, center 30%;
   background-repeat: no-repeat, no-repeat;
 }
+
+/* ============================================================
+   Survey and activity chooser motion
+   Each step arrives as a unit and its rows follow in sequence —
+   a BA should see where to look without reading the whole screen.
+   ============================================================ */
+.survey-step {
+  animation: survey-in 420ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+@keyframes survey-in {
+  from { opacity: 0; transform: translateX(26px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.survey-item {
+  animation: survey-rise 440ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+@keyframes survey-rise {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.survey-tick { transition: background-color 320ms ease; }
+
+.survey-note { animation: survey-rise 360ms ease both; }
+
+.choice-card {
+  animation: choice-in 560ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+@keyframes choice-in {
+  from { opacity: 0; transform: translateY(22px) scale(0.97); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Honour a reduced-motion preference: the steps still change, they
+   just stop sliding. */
+@media (prefers-reduced-motion: reduce) {
+  .survey-step,
+  .survey-item,
+  .survey-note,
+  .choice-card {
+    animation: none;
+  }
+}

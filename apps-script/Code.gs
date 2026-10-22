@@ -33,6 +33,7 @@ const SHEET_PRIZES = "Prizes";
 const SHEET_SETTINGS = "Settings";
 const SHEET_SPINS = "Spins";
 const SHEET_CITIES = "Cities";
+const SHEET_SURVEYS = "Surveys";
 
 function ss_() {
   return SpreadsheetApp.getActiveSpreadsheet();
@@ -141,6 +142,7 @@ function doPost(e) {
     if (payload.action === "addWinner") return handleAddWinner_(payload);
     if (payload.action === "savePrizes") return handleSavePrizes_(payload);
     if (payload.action === "claimMainSlot") return handleClaimMainSlot_();
+    if (payload.action === "addSurvey") return handleAddSurvey_(payload);
     if (payload.action === "saveCities") return handleSaveCities_(payload);
     if (payload.action === "saveUsers") return handleSaveUsers_(payload);
     if (payload.action === "saveSettings") return handleSaveSettings_(payload);
@@ -393,6 +395,47 @@ function handleClaimMainSlot_() {
   } finally {
     lock.releaseLock();
   }
+}
+
+
+/* ------------------------------------------------------------------
+   Market share survey. One row per outlet visit.
+   ------------------------------------------------------------------ */
+function handleAddSurvey_(payload) {
+  const r = payload.ranks || {};
+  const c = payload.crates || {};
+
+  appendByHeader_(sheet_(SHEET_SURVEYS), {
+    id: "SRV-" + Date.now() + "-" + Math.random().toString(36).slice(2, 8),
+    date: payload.date || new Date().toISOString(),
+    baId: payload.baId || "",
+    baName: payload.baName || "",
+    outletId: payload.outletId || "",
+    outletName: payload.outletName || "",
+    city: payload.city || "",
+
+    rankHabesha: r.habesha || "",
+    rankStGeorge: r.stgeorge || "",
+    rankMeta: r.meta || "",
+    rankDashen: r.dashen || "",
+    rankBedele: r.bedele || "",
+    rankWalia: r.walia || "",
+    rankOther: r.other || "",
+    otherBrandName: payload.otherBrandName || "",
+
+    cratesHabesha: c.habesha || "",
+    cratesStGeorge: c.stgeorge || "",
+    cratesMeta: c.meta || "",
+    cratesDashen: c.dashen || "",
+    cratesBedele: c.bedele || "",
+    cratesWalia: c.walia || "",
+    cratesOther: c.other || "",
+
+    reason: payload.reason || "",
+    reasonOther: payload.reasonOther || "",
+  });
+
+  return json_({ success: true, status: "success" });
 }
 
 function handleLogSpin_(payload) {
@@ -852,6 +895,18 @@ function setupAllSheets() {
   createSheetIfMissing_(ss, SHEET_PRIZES, ["name", "qty", "active", "tier", "weight", "updatedAt"]);
   createSheetIfMissing_(ss, SHEET_SETTINGS, ["key", "value"]);
   createSheetIfMissing_(ss, SHEET_CITIES, ["name", "active", "updatedAt"]);
+
+  /* One row per completed survey, one column per answer. Flat rather
+     than packed into JSON so the sheet pivots straight into analysis
+     without anyone having to unpack a field first. */
+  createSheetIfMissing_(ss, SHEET_SURVEYS, [
+    "id", "date", "baId", "baName", "outletId", "outletName", "city",
+    "rankHabesha", "rankStGeorge", "rankMeta", "rankDashen",
+    "rankBedele", "rankWalia", "rankOther", "otherBrandName",
+    "cratesHabesha", "cratesStGeorge", "cratesMeta", "cratesDashen",
+    "cratesBedele", "cratesWalia", "cratesOther",
+    "reason", "reasonOther",
+  ]);
 
   seedUsersIfEmpty_();
   seedPrizesIfEmpty_();
