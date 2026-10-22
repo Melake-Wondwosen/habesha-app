@@ -85,6 +85,7 @@ function authorise() {
   lock.waitLock(5000);
   lock.releaseLock();
 
+  Logger.log(migrateSurveyHeaders_());
   Logger.log("Authorised. Tabs: " + names.join(", "));
   Logger.log("Photo folder: " + folder.getName());
   return "OK";
@@ -877,6 +878,56 @@ function onOpen() {
 
 // ─── One-time setup ──────────────────────────────────────────────────
 
+
+/* ------------------------------------------------------------------
+   Keep the Surveys tab's columns matching the questionnaire.
+
+   createSheetIfMissing_ only ever creates — it leaves an existing tab
+   alone, so a brand change (Walia out, Harar in) would otherwise mean
+   editing headers by hand. This repairs them in place: it adds columns
+   that are missing, leaves any extras alone rather than deleting data,
+   and reorders nothing, so existing rows stay valid.
+   ------------------------------------------------------------------ */
+function migrateSurveyHeaders_() {
+  const want = [
+    "id", "date", "baId", "baName", "outletId", "outletName", "city",
+    "rankHabesha", "rankHarar", "rankDashen", "rankBedele",
+    "rankStGeorge", "rankMeta", "rankOther", "otherBrandName",
+    "cratesHabesha", "cratesHarar", "cratesDashen", "cratesBedele",
+    "cratesStGeorge", "cratesMeta", "cratesOther",
+    "reason", "reasonOther",
+  ];
+
+  const sheet = ss_().getSheetByName(SHEET_SURVEYS);
+  if (!sheet) return "Surveys tab absent — setupAllSheets will create it.";
+
+  const width = Math.max(sheet.getLastColumn(), 1);
+  const have = sheet.getRange(1, 1, 1, width).getValues()[0]
+    .map(function (h) { return String(h || "").trim(); });
+
+  /* A tab from the earlier brand set: rename rather than add, so the
+     column keeps whatever responses are already under it. */
+  const renames = { rankWalia: "rankHarar", cratesWalia: "cratesHarar" };
+  let renamed = 0;
+  have.forEach(function (h, i) {
+    if (renames[h] && have.indexOf(renames[h]) === -1) {
+      sheet.getRange(1, i + 1).setValue(renames[h]);
+      have[i] = renames[h];
+      renamed++;
+    }
+  });
+
+  const missing = want.filter(function (h) { return have.indexOf(h) === -1; });
+  missing.forEach(function (h, i) {
+    sheet.getRange(1, have.length + i + 1).setValue(h);
+  });
+
+  if (missing.length || renamed) {
+    sheet.setFrozenRows(1);
+  }
+  return "Surveys: " + renamed + " renamed, " + missing.length + " added.";
+}
+
 function setupAllSheets() {
   const ss = ss_();
 
@@ -907,6 +958,10 @@ function setupAllSheets() {
     "cratesStGeorge", "cratesMeta", "cratesOther",
     "reason", "reasonOther",
   ]);
+
+  /* Repairs an existing Surveys tab whose columns predate a brand
+     change; a no-op on a tab that was just created. */
+  Logger.log(migrateSurveyHeaders_());
 
   seedUsersIfEmpty_();
   seedPrizesIfEmpty_();
