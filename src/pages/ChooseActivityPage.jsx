@@ -1,8 +1,12 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { HABESHA, HabeshaMark, Screen, TibebBand } from "../brand/HabeshaBrand";
 import { useAuth } from "../context/AuthContext";
-import { flushSurveyQueue, pendingSurveyCount } from "../services/surveyService";
+import {
+  flushSurveyQueue,
+  pendingSurveyCount,
+  lastSurveyError,
+} from "../services/surveyService";
 
 /* ------------------------------------------------------------------
    What a BA is doing at this outlet. Two jobs share the app now, and
@@ -12,12 +16,16 @@ import { flushSurveyQueue, pendingSurveyCount } from "../services/surveyService"
 export default function ChooseActivityPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const pending = pendingSurveyCount();
+  const [pending, setPending] = useState(pendingSurveyCount());
+  const [why, setWhy] = useState(lastSurveyError());
 
   /* Every BA passes through here, which makes it the natural place to
      push anything that was filled in while they were out of signal. */
   useEffect(() => {
-    flushSurveyQueue();
+    flushSurveyQueue().then(() => {
+      setPending(pendingSurveyCount());
+      setWhy(lastSurveyError());
+    });
   }, []);
 
   const CARDS = [
@@ -72,30 +80,50 @@ export default function ChooseActivityPage() {
               }}
             >
               <div className="flex items-center gap-4">
-                <span
+                <div
                   className="flex-none grid place-items-center rounded-2xl"
                   style={{ background: c.tone, width: 56, height: 56, fontSize: 26 }}
                 >
                   {c.icon}
-                </span>
-                <span className="flex-1">
-                  <span className="habesha-display block text-2xl">{c.title}</span>
-                  <span
-                    className="block text-sm mt-0.5"
-                    style={{ color: `${HABESHA.ink}99` }}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div
+                    className="habesha-display text-2xl"
+                    style={{ lineHeight: 1.1 }}
+                  >
+                    {c.title}
+                  </div>
+                  <div
+                    className="text-sm mt-1"
+                    style={{ color: `${HABESHA.ink}99`, lineHeight: 1.3 }}
                   >
                     {c.sub}
-                  </span>
-                </span>
-                <span style={{ color: `${HABESHA.ink}55`, fontSize: 20 }}>→</span>
+                  </div>
+                </div>
+                <div
+                  className="flex-none"
+                  style={{ color: `${HABESHA.ink}55`, fontSize: 20 }}
+                >
+                  →
+                </div>
               </div>
             </button>
           ))}
 
           {pending > 0 && (
-            <p className="text-center text-xs mt-1" style={{ color: HABESHA.amber }}>
-              {pending} survey{pending > 1 ? "s" : ""} waiting to upload
-            </p>
+            <div className="mt-1 text-center">
+              <p className="text-xs" style={{ color: HABESHA.amber }}>
+                {pending} survey{pending > 1 ? "s" : ""} waiting to upload
+              </p>
+              {why && (
+                <p
+                  className="text-xs mt-1 px-2"
+                  style={{ color: `${HABESHA.cream}99`, lineHeight: 1.4 }}
+                >
+                  {why}
+                </p>
+              )}
+            </div>
           )}
         </div>
 

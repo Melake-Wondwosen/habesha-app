@@ -24,6 +24,7 @@ export const REASONS = [
 ];
 
 const QUEUE_KEY = "offline_surveys";
+const ERROR_KEY = "offline_surveys_why";
 
 export async function submitSurvey(payload) {
   const res = await postJson({ action: "addSurvey", ...payload });
@@ -31,8 +32,14 @@ export async function submitSurvey(payload) {
   if (!res.ok || res.data?.status !== "success") {
     /* A BA standing in an outlet with no signal shouldn't lose a
        completed questionnaire. Keep it and push it on reconnect. */
+    const why = res.message || res.data?.message || "The server rejected it.";
     queue(payload);
-    return { ok: false, queued: true, message: res.message || res.data?.message };
+    try {
+      localStorage.setItem(ERROR_KEY, why);
+    } catch {
+      /* Nothing to do — the queue still holds the survey. */
+    }
+    return { ok: false, queued: true, message: why };
   }
   return { ok: true };
 }
@@ -58,14 +65,23 @@ export async function flushSurveyQueue() {
   if (q.length === 0 || !navigator.onLine) return;
 
   const unsent = [];
+  let why = "";
   for (const item of q) {
     const res = await postJson({ action: "addSurvey", ...item });
-    if (!res.ok || res.data?.status !== "success") unsent.push(item);
+    if (!res.ok || res.data?.status !== "success") {
+      unsent.push(item);
+      why = res.message || res.data?.message || "The server rejected it.";
+    }
   }
 
   try {
-    if (unsent.length === 0) localStorage.removeItem(QUEUE_KEY);
-    else localStorage.setItem(QUEUE_KEY, JSON.stringify(unsent));
+    if (unsent.length === 0) {
+      localStorage.removeItem(QUEUE_KEY);
+      localStorage.removeItem(ERROR_KEY);
+    } else {
+      localStorage.setItem(QUEUE_KEY, JSON.stringify(unsent));
+      if (why) localStorage.setItem(ERROR_KEY, why);
+    }
   } catch {
     /* As above. */
   }
@@ -76,5 +92,13 @@ export function pendingSurveyCount() {
     return (JSON.parse(localStorage.getItem(QUEUE_KEY)) || []).length;
   } catch {
     return 0;
+  }
+}
+
+export function lastSurveyError() {
+  try {
+    return localStorage.getItem(ERROR_KEY) || "";
+  } catch {
+    return "";
   }
 }
