@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   HABESHA,
@@ -8,7 +8,6 @@ import {
   TibebBand,
 } from "../brand/HabeshaBrand";
 import { useAuth } from "../context/AuthContext";
-import { getOutlets, newestFirst } from "../services/outletService";
 import { BRANDS, REASONS, submitSurvey } from "../services/surveyService";
 
 /* ------------------------------------------------------------------
@@ -25,8 +24,8 @@ export default function SurveyPage() {
   const { user } = useAuth();
 
   const [step, setStep] = useState(0);
-  const [outlets, setOutlets] = useState([]);
-  const [outlet, setOutlet] = useState(null);
+  const [outletName, setOutletName] = useState("");
+  const [outletId, setOutletId] = useState("");
 
   const [ranks, setRanks] = useState({});       // brand key -> 1..n
   const [otherBrandName, setOtherBrandName] = useState("");
@@ -36,23 +35,6 @@ export default function SurveyPage() {
 
   const [saving, setSaving] = useState(false);
   const [note, setNote] = useState("");
-
-  useEffect(() => {
-    const cached = localStorage.getItem(`outlets_${user?.id}`);
-    if (cached) {
-      try {
-        setOutlets(newestFirst(JSON.parse(cached)));
-      } catch {
-        /* Re-fetched below anyway. */
-      }
-    }
-    if (!user?.id) return;
-    getOutlets(user.id)
-      .then((d) => setOutlets(newestFirst(d)))
-      .catch(() => {
-        /* Cache covers it; the BA can still work offline. */
-      });
-  }, [user?.id]);
 
   /* ---- Q1: tap to assign the next rank, tap again to release it.
      Simpler on a phone than drag-to-reorder, and it matches the paper
@@ -82,7 +64,7 @@ export default function SurveyPage() {
   };
 
   const canAdvance =
-    (step === 0 && outlet) ||
+    (step === 0 && outletName.trim() && outletId.trim()) ||
     (step === 1 && Object.keys(ranks).length > 0) ||
     step === 2 ||
     (step === 3 && reason && (reason !== "Other" || reasonOther.trim()));
@@ -94,9 +76,8 @@ export default function SurveyPage() {
     const res = await submitSurvey({
       baId: user?.id,
       baName: user?.name || user?.username,
-      outletId: outlet.id,
-      outletName: outlet.name,
-      city: outlet.city,
+      outletId: outletId.trim(),
+      outletName: outletName.trim(),
       ranks,
       crates,
       otherBrandName,
@@ -162,35 +143,45 @@ export default function SurveyPage() {
         <div key={step} className="flex-1 survey-step overflow-y-auto">
           {step === 0 && (
             <>
-              <Prompt>Which outlet are you in?</Prompt>
-              <div className="space-y-3">
-                {outlets.map((o, i) => (
-                  <button
-                    key={o.id}
-                    onClick={() => setOutlet(o)}
-                    className="habesha-lockup-sm habesha-press w-full p-4 flex items-center gap-3 text-left survey-item"
-                    style={{
-                      background:
-                        outlet?.id === o.id ? HABESHA.amber : HABESHA.cream,
-                      color: HABESHA.ink,
-                      animationDelay: `${i * 55}ms`,
-                    }}
-                  >
-                    <span className="flex-1">
-                      <span className="habesha-display block text-lg">{o.name}</span>
-                      <span className="text-xs" style={{ color: `${HABESHA.ink}99` }}>
-                        {o.city}
-                      </span>
-                    </span>
-                    {outlet?.id === o.id && <span style={{ fontSize: 18 }}>✓</span>}
-                  </button>
-                ))}
-                {outlets.length === 0 && (
-                  <p className="text-sm" style={{ color: `${HABESHA.cream}99` }}>
-                    No outlets yet. Register one first.
-                  </p>
-                )}
-              </div>
+              <Prompt>Where are you?</Prompt>
+              <Hint>
+                Type the outlet exactly as it appears on the shop front and on
+                your route sheet — these two fields are what ties every answer
+                below to a place.
+              </Hint>
+
+              <label className="block mb-4 survey-item">
+                <span
+                  className="habesha-eyebrow block mb-1.5"
+                  style={{ color: `${HABESHA.cream}99` }}
+                >
+                  Outlet name
+                </span>
+                <input
+                  value={outletName}
+                  onChange={(e) => setOutletName(e.target.value)}
+                  placeholder="e.g. Fiyel Bet"
+                  autoComplete="off"
+                  className="habesha-field w-full"
+                />
+              </label>
+
+              <label className="block survey-item" style={{ animationDelay: "70ms" }}>
+                <span
+                  className="habesha-eyebrow block mb-1.5"
+                  style={{ color: `${HABESHA.cream}99` }}
+                >
+                  Outlet ID
+                </span>
+                <input
+                  value={outletId}
+                  onChange={(e) => setOutletId(e.target.value.toUpperCase())}
+                  placeholder="e.g. ADD-0142"
+                  autoComplete="off"
+                  autoCapitalize="characters"
+                  className="habesha-field w-full"
+                />
+              </label>
             </>
           )}
 
