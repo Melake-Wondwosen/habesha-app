@@ -415,20 +415,20 @@ function handleAddSurvey_(payload) {
     city: payload.city || "",
 
     rankHabesha: r.habesha || "",
-    rankStGeorge: r.stgeorge || "",
-    rankMeta: r.meta || "",
+    rankHarar: r.harar || "",
     rankDashen: r.dashen || "",
     rankBedele: r.bedele || "",
-    rankWalia: r.walia || "",
+    rankStGeorge: r.stgeorge || "",
+    rankMeta: r.meta || "",
     rankOther: r.other || "",
     otherBrandName: payload.otherBrandName || "",
 
     cratesHabesha: c.habesha || "",
-    cratesStGeorge: c.stgeorge || "",
-    cratesMeta: c.meta || "",
+    cratesHarar: c.harar || "",
     cratesDashen: c.dashen || "",
     cratesBedele: c.bedele || "",
-    cratesWalia: c.walia || "",
+    cratesStGeorge: c.stgeorge || "",
+    cratesMeta: c.meta || "",
     cratesOther: c.other || "",
 
     reason: payload.reason || "",
@@ -901,10 +901,10 @@ function setupAllSheets() {
      without anyone having to unpack a field first. */
   createSheetIfMissing_(ss, SHEET_SURVEYS, [
     "id", "date", "baId", "baName", "outletId", "outletName", "city",
-    "rankHabesha", "rankStGeorge", "rankMeta", "rankDashen",
-    "rankBedele", "rankWalia", "rankOther", "otherBrandName",
-    "cratesHabesha", "cratesStGeorge", "cratesMeta", "cratesDashen",
-    "cratesBedele", "cratesWalia", "cratesOther",
+    "rankHabesha", "rankHarar", "rankDashen", "rankBedele",
+    "rankStGeorge", "rankMeta", "rankOther", "otherBrandName",
+    "cratesHabesha", "cratesHarar", "cratesDashen", "cratesBedele",
+    "cratesStGeorge", "cratesMeta", "cratesOther",
     "reason", "reasonOther",
   ]);
 

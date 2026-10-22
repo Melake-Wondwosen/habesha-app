@@ -5,11 +5,11 @@ import { postJson } from "./api";
    columns so nothing has to be translated on the way in. */
 export const BRANDS = [
   { key: "habesha", label: "Habesha", ours: true },
-  { key: "stgeorge", label: "St. George" },
-  { key: "meta", label: "Meta" },
+  { key: "harar", label: "Harar" },
   { key: "dashen", label: "Dashen" },
   { key: "bedele", label: "Bedele" },
-  { key: "walia", label: "Walia" },
+  { key: "stgeorge", label: "St. George" },
+  { key: "meta", label: "Meta" },
   { key: "other", label: "Other", isOther: true },
 ];
 
