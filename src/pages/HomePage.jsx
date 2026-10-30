@@ -95,23 +95,6 @@ export default function HomePage() {
           <CampaignTagline className="mx-auto" style={{ maxWidth: "17rem" }} />
         </div>
 
-        {!isAdmin(user) && (
-          <button
-            onClick={() => navigate("/choose")}
-            className="habesha-lockup-sm habesha-press w-full p-4 mb-5 flex items-center gap-3 text-left"
-            style={{ background: HABESHA.amber, color: HABESHA.ink }}
-          >
-            <span style={{ fontSize: 22 }}>📋</span>
-            <span className="flex-1">
-              <span className="habesha-display block text-lg">Market share survey</span>
-              <span className="block text-xs" style={{ color: `${HABESHA.ink}99` }}>
-                Switch activity
-              </span>
-            </span>
-            <span style={{ color: `${HABESHA.ink}55`, fontSize: 18 }}>→</span>
-          </button>
-        )}
-
         {!isAdmin(user) && <SectionLabel>My outlets</SectionLabel>}
 
         <div className="space-y-4">

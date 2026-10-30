@@ -93,7 +93,7 @@ export default function SurveyPage() {
     } else if (res.queued) {
       setNote("No connection — saved on this phone and will upload later.");
     }
-    setTimeout(() => navigate("/choose"), 1700);
+    setTimeout(() => navigate("/"), 1700);
   };
 
   return (
@@ -111,7 +111,7 @@ export default function SurveyPage() {
             </p>
           </div>
           <button
-            onClick={() => navigate("/choose")}
+            onClick={() => navigate("/")}
             className="rounded-full grid place-items-center"
             style={{
               width: 40,

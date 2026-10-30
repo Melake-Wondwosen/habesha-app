@@ -24,6 +24,7 @@ export const REASONS = [
 ];
 
 const QUEUE_KEY = "offline_surveys";
+const DONE_KEY = "surveys_done";
 const ERROR_KEY = "offline_surveys_why";
 
 export async function submitSurvey(payload) {
@@ -39,9 +40,45 @@ export async function submitSurvey(payload) {
     } catch {
       /* Nothing to do — the queue still holds the survey. */
     }
+    recordDone();
     return { ok: false, queued: true, message: why };
   }
+
+  recordDone();
   return { ok: true };
+}
+
+/* A running tally of questionnaires finished on this phone, kept by
+   day. Counted whether or not the upload landed, because from the BA's
+   side the work is done either way and a counter that drops when the
+   signal does reads like lost data. */
+function recordDone() {
+  try {
+    const log = JSON.parse(localStorage.getItem(DONE_KEY)) || {};
+    const today = new Date().toISOString().slice(0, 10);
+    log[today] = (log[today] || 0) + 1;
+    localStorage.setItem(DONE_KEY, JSON.stringify(log));
+  } catch {
+    /* The count is a convenience; never fail a submission over it. */
+  }
+}
+
+export function doneToday() {
+  try {
+    const log = JSON.parse(localStorage.getItem(DONE_KEY)) || {};
+    return log[new Date().toISOString().slice(0, 10)] || 0;
+  } catch {
+    return 0;
+  }
+}
+
+export function doneAllTime() {
+  try {
+    const log = JSON.parse(localStorage.getItem(DONE_KEY)) || {};
+    return Object.values(log).reduce((a, b) => a + (Number(b) || 0), 0);
+  } catch {
+    return 0;
+  }
 }
 
 function queue(payload) {

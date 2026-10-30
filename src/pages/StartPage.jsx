@@ -64,7 +64,7 @@ export default function StartPage() {
           </p>
         </div>
 
-        <HabeshaButton onClick={() => navigate(user ? "/choose" : "/login")}>
+        <HabeshaButton onClick={() => navigate(user ? "/home" : "/login")}>
           Start →
         </HabeshaButton>
 

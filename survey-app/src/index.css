@@ -1,0 +1,278 @@
+@import "tailwindcss";
+
+/* ============================================================
+   HABESHA — የሚያረካ
+   Design tokens sampled off the supplied artwork: the ink
+   #231F20 is the field the stickers are drawn on, the gold ramp
+   #754927 → #EED582 is the tibeb band's own gradient, and
+   #F0E77F is the highlight in the Adey Abeba.
+
+   Trimmed to what the survey uses. The wheel app's four visual
+   themes are not here, because nothing in this app switches
+   theme and carrying them would mean two copies to keep in step.
+   ============================================================ */
+
+@theme {
+  --color-habesha-ink: #14100f;
+  --color-habesha-ink-deep: #0b0808;
+  --color-habesha-field: #231f20;
+  --color-habesha-bronze: #754927;
+  --color-habesha-gold: #b38a4a;
+  --color-habesha-gold-lit: #d0ac63;
+  --color-habesha-amber: #e5ca78;
+  --color-habesha-adey: #f0e77f;
+  --color-habesha-cream: #f7f1e3;
+  --color-habesha-silver: #8d8378;
+
+  --font-display: "Archivo Black", "Archivo", system-ui, sans-serif;
+  --font-sans: "Archivo", system-ui, "Segoe UI", Roboto, sans-serif;
+  --font-ethiopic: "Noto Sans Ethiopic", "Nyala", "Abyssinica SIL", serif;
+}
+
+:root {
+  --habesha-ink: #14100f;
+  --habesha-ink-deep: #0b0808;
+  --habesha-field: #231f20;
+  --habesha-bronze: #754927;
+  --habesha-gold: #b38a4a;
+  --habesha-gold-lit: #d0ac63;
+  --habesha-amber: #e5ca78;
+  --habesha-adey: #f0e77f;
+  --habesha-cream: #f7f1e3;
+  --habesha-silver: #8d8378;
+
+  --habesha-scrim: 0.62;
+
+  color-scheme: dark;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+}
+
+#root {
+  position: relative;
+  overflow-x: hidden;
+}
+
+body {
+  background: var(--habesha-ink-deep);
+  color: var(--habesha-cream);
+  font-family: var(--font-sans);
+  overscroll-behavior-y: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Amharic sits alongside Latin everywhere in this brand. */
+.am {
+  font-family: var(--font-ethiopic);
+  font-feature-settings: normal;
+}
+
+/* ------------------------------------------------------------
+   The lockup keyline. Every raised surface repeats the wordmark's
+   construction, so the UI is cut from the same cloth as the logo.
+   ------------------------------------------------------------ */
+.habesha-lockup {
+  border-radius: 18px;
+  box-shadow:
+    0 0 0 3px var(--habesha-gold),
+    0 0 0 6px var(--habesha-ink),
+    6px 7px 0 6px var(--habesha-field);
+}
+
+.habesha-lockup-sm {
+  border-radius: 14px;
+  box-shadow:
+    0 0 0 2px var(--habesha-gold),
+    0 0 0 4px var(--habesha-ink),
+    4px 5px 0 4px var(--habesha-field);
+}
+
+.habesha-press {
+  transition:
+    transform 120ms ease,
+    box-shadow 120ms ease;
+}
+.habesha-press:active:not(:disabled) {
+  transform: translate(5px, 6px);
+  box-shadow:
+    0 0 0 3px var(--habesha-gold),
+    0 0 0 6px var(--habesha-ink),
+    0 0 0 6px var(--habesha-field);
+}
+.habesha-lockup-sm.habesha-press:active:not(:disabled) {
+  transform: translate(3px, 4px);
+  box-shadow:
+    0 0 0 2px var(--habesha-gold),
+    0 0 0 4px var(--habesha-ink),
+    0 0 0 4px var(--habesha-field);
+}
+
+.habesha-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+  line-height: 0.92;
+  text-transform: uppercase;
+}
+
+.habesha-eyebrow {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+}
+
+/* Inputs sit on cream, like a form printed on the poster. */
+.habesha-field {
+  width: 100%;
+  background: var(--habesha-cream);
+  color: var(--habesha-ink);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 16px; /* keeps iOS from zooming on focus */
+  padding: 14px 16px;
+  border: 0;
+  border-radius: 12px;
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--habesha-gold),
+    0 0 0 4px var(--habesha-ink);
+}
+.habesha-field::placeholder {
+  color: #9b8b7c;
+  font-weight: 500;
+}
+.habesha-field:focus-visible {
+  box-shadow:
+    0 0 0 2px var(--habesha-amber),
+    0 0 0 5px var(--habesha-ink);
+}
+
+:where(button, a, [tabindex]):focus-visible {
+  outline: 3px solid var(--habesha-amber);
+  outline-offset: 3px;
+}
+
+/* Thin scrollbar for the long question lists. */
+.habesha-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(247, 241, 227, 0.4) transparent;
+}
+.habesha-scroll::-webkit-scrollbar {
+  width: 3px;
+}
+.habesha-scroll::-webkit-scrollbar-thumb {
+  background: rgba(247, 241, 227, 0.4);
+  border-radius: 999px;
+}
+
+/* ============================================================
+   Campaign backdrop
+   Inside the app column rather than on the page, so a desktop
+   window clips the photograph to the phone-width frame instead
+   of letting it bleed across the whole screen.
+
+   Sticky rather than fixed: a fixed layer escapes the column's
+   overflow clipping, and background-attachment: fixed is ignored
+   on iOS. Sticky stays put while content scrolls and still clips.
+
+   0.62 is the floor for the scrim. At that value the worst pixel
+   in the frame, the lit wall behind the table, still gives cream
+   text 4.7:1. Brighter than this needs the plate retouched.
+   ============================================================ */
+.habesha-backdrop {
+  position: sticky;
+  top: 0;
+  flex: none;
+  height: 100vh;
+  height: 100dvh;
+  margin-bottom: -100vh;
+  margin-bottom: -100dvh;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(
+      to bottom,
+      rgba(11, 8, 8, calc(var(--habesha-scrim) + 0.14)) 0%,
+      rgba(20, 16, 15, var(--habesha-scrim)) 38%,
+      rgba(11, 8, 8, calc(var(--habesha-scrim) + 0.1)) 100%
+    ),
+    url("./assets/habesha-bg.webp");
+  background-size: cover, cover;
+  background-position: center, center 30%;
+  background-repeat: no-repeat, no-repeat;
+}
+
+/* ============================================================
+   Survey motion. Each step arrives as a unit and its rows follow
+   in sequence, so a BA sees where to look without reading the
+   whole screen first.
+   ============================================================ */
+.survey-step {
+  animation: survey-in 420ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+@keyframes survey-in {
+  from {
+    opacity: 0;
+    transform: translateX(26px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.survey-item {
+  animation: survey-rise 440ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+@keyframes survey-rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.survey-tick {
+  transition: background-color 320ms ease;
+}
+
+.survey-note {
+  animation: survey-rise 360ms ease both;
+}
+
+.choice-card {
+  animation: choice-in 560ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+@keyframes choice-in {
+  from {
+    opacity: 0;
+    transform: translateY(22px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .survey-step,
+  .survey-item,
+  .survey-note,
+  .choice-card {
+    animation: none;
+  }
+}
