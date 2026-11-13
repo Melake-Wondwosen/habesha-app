@@ -16,6 +16,7 @@ import {
   readCacheTime,
   FALLBACK_PRIZES,
 } from "../services/prizeService";
+import { readMainGate } from "../services/mainGateService";
 
 export default function AdminPrizesPage() {
   const navigate = useNavigate();
@@ -25,6 +26,7 @@ export default function AdminPrizesPage() {
   const [newName, setNewName] = useState("");
   const [password, setPassword] = useState("");
   const [noWinWeight, setNoWinWeight] = useState(2);
+  const [gate, setGate] = useState(null);
 
 
   const [loading, setLoading] = useState(true);
@@ -172,6 +174,10 @@ export default function AdminPrizesPage() {
   };
   const cachedAt = readCacheTime();
 
+  useEffect(() => {
+    readMainGate().then(setGate);
+  }, []);
+
   return (
     <Screen>
       <div className="flex flex-col flex-1 px-5 pt-8 pb-8">
@@ -209,6 +215,36 @@ export default function AdminPrizesPage() {
             {notice}
           </div>
         )}
+
+        {/* Where the main-prize gate stands right now. Without this the
+            only way to tell why a Cap did or didn't come up is to guess. */}
+        <SectionLabel>Main prize gate</SectionLabel>
+        <div
+          className="habesha-lockup-flat p-4 mb-5"
+          style={{ background: HABESHA.cream, color: HABESHA.ink }}
+        >
+          {!gate ? (
+            <p className="text-sm" style={{ color: HABESHA.bronze }}>
+              Checking…
+            </p>
+          ) : (
+            <>
+              <p className="habesha-display text-xl mb-1">
+                {gate.unlocked ? "Open" : "Shut"}
+              </p>
+              <p className="text-sm" style={{ color: `${HABESHA.ink}AA` }}>
+                {gate.unlocked
+                  ? "A main prize can be won on the next spin."
+                  : `${gate.bottlesToNext ?? "?"} more bottles before a main prize can be won.`}
+              </p>
+              <p className="text-xs mt-2" style={{ color: HABESHA.bronze }}>
+                {gate.bottlesDispensed ?? 0} bottles dispensed ·{" "}
+                {gate.mainPrizesAwarded ?? 0} main prizes awarded · one per{" "}
+                {gate.interval ?? 24} bottles
+              </p>
+            </>
+          )}
+        </div>
 
         {/* The list */}
         <SectionLabel>The list</SectionLabel>

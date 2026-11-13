@@ -206,25 +206,44 @@ const NO_WIN_COLOR = { bg: HABESHA.inkDeep, fg: "#E9A9AE" };
      spin so the pointer genuinely lands on that slice — the animation is
      honest about the result, it just isn't uniform across slices. */
   function pickWeighted(slices, allowMain) {
-    const weights = slices.map((sl) => {
-      if (sl.isNoWin) return noWinWeight;
-      /* Main prizes are off the table until the campaign has moved
-         another crate. They stay drawn on the wheel — a slice that
-         vanishes tells the customer exactly what they can't win. */
-      if (sl.tier === "main" && !allowMain) return 0;
+    /* Main prizes are off the table until the campaign has moved
+       another crate. They stay drawn on the wheel, because a slice
+       that vanishes tells the customer exactly what they can't win. */
+    const eligible = slices.map(
+      (sl) => sl.isNoWin || !(sl.tier === "main" && !allowMain)
+    );
+
+    const weights = slices.map((sl, i) => {
+      if (!eligible[i]) return 0;
+      if (sl.isNoWin) return Math.max(0, Number(noWinWeight) || 0);
       const w = Number(sl.weight);
       return isNaN(w) || w < 0 ? 0 : w;
     });
 
     const total = weights.reduce((a, b) => a + b, 0);
-    if (total <= 0) return Math.floor(Math.random() * slices.length);
 
-    let roll = Math.random() * total;
-    for (let i = 0; i < slices.length; i++) {
-      roll -= weights[i];
-      if (roll < 0) return i;
+    if (total > 0) {
+      let roll = Math.random() * total;
+      for (let i = 0; i < slices.length; i++) {
+        roll -= weights[i];
+        if (roll < 0) return i;
+      }
     }
-    return slices.length - 1;
+
+    /* Everything eligible has zero weight: the campaign is all main
+       prizes with the gate shut, or stock has run to nothing. This
+       used to fall through to a uniform pick across every slice,
+       which handed out the very main prizes the gate was holding
+       back — a Cap on the first spin of the campaign. Never offer
+       a gated slice here. */
+    const open = [];
+    for (let i = 0; i < slices.length; i++) if (eligible[i]) open.push(i);
+
+    if (open.length === 0) {
+      const noWin = slices.findIndex((sl) => sl.isNoWin);
+      return noWin === -1 ? 0 : noWin;
+    }
+    return open[Math.floor(Math.random() * open.length)];
   }
 
   /* Rotation that puts the given slice under the pointer, landing a

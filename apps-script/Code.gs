@@ -361,22 +361,77 @@ function mainIntervalCached_() {
 
 
 
-/* Read-only: how the wheel decides whether to put main prizes on at all. */
-function handleMainGate_() {
+/* ------------------------------------------------------------------
+   One place that decides whether a main prize is reachable.
+
+   Two conditions, both required. The campaign must have moved at
+   least one whole crate, and it must have moved another crate since
+   the last main prize went out. The first condition is stated on its
+   own rather than left to the division, so a counter that somehow
+   runs ahead of the awarded count can never open the gate before the
+   opening crate is gone.
+   ------------------------------------------------------------------ */
+function gateState_() {
   var bottles = readCounter_(SETTING_BOTTLES, 0);
   var awarded = readCounter_(SETTING_MAIN_AWARDED, 0);
   var interval = mainIntervalCached_();
+
+  return {
+    bottles: bottles,
+    awarded: awarded,
+    interval: interval,
+    unlocked: bottles >= interval && Math.floor(bottles / interval) > awarded,
+    bottlesToNext: Math.max(0, (awarded + 1) * interval - bottles),
+  };
+}
+
+/* Read-only: what the wheel asks before it draws. */
+function handleMainGate_() {
+  var g = gateState_();
   return json_({
     success: true,
-    bottlesDispensed: bottles,
-    mainPrizesAwarded: awarded,
-    interval: interval,
-    unlocked: Math.floor(bottles / interval) > awarded,
+    bottlesDispensed: g.bottles,
+    mainPrizesAwarded: g.awarded,
+    interval: g.interval,
+    bottlesToNext: g.bottlesToNext,
+    unlocked: g.unlocked,
   });
 }
 
-/* Atomic claim. Returns granted:false if the slot went to someone else
-   between the wheel reading the gate and landing on a main prize. */
+/* ------------------------------------------------------------------
+   Zero the counters. Run this from the editor before a campaign goes
+   live, because testing leaves bottles on the clock: a few trial
+   spins can push the count past a crate, and the first real spin of
+   the campaign then hands out a main prize.
+   ------------------------------------------------------------------ */
+function resetMainGate() {
+  writeCounter_(SETTING_BOTTLES, 0);
+  writeCounter_(SETTING_MAIN_AWARDED, 0);
+  CacheService.getScriptCache().remove(SETTING_INTERVAL);
+  var g = gateState_();
+  Logger.log(
+    "Main gate reset. Bottles 0, awarded 0, interval " +
+      g.interval +
+      ". No main prize until " +
+      g.interval +
+      " bottles have gone out."
+  );
+  return "OK";
+}
+
+/* Read the counters without changing them. */
+function showMainGate() {
+  var g = gateState_();
+  Logger.log(
+    "Bottles dispensed: " + g.bottles +
+    " | main prizes awarded: " + g.awarded +
+    " | interval: " + g.interval +
+    " | unlocked: " + g.unlocked +
+    " | bottles until next: " + g.bottlesToNext
+  );
+  return g;
+}
+
 function handleClaimMainSlot_() {
   var lock = LockService.getScriptLock();
   try {
@@ -385,13 +440,13 @@ function handleClaimMainSlot_() {
     return json_({ success: false, granted: false, message: "Busy, try again." });
   }
   try {
-    var bottles = readCounter_(SETTING_BOTTLES, 0);
-    var awarded = readCounter_(SETTING_MAIN_AWARDED, 0);
-    var interval = mainIntervalCached_();
-    if (Math.floor(bottles / interval) <= awarded) {
-      return json_({ success: true, granted: false });
+    /* Re-checked inside the lock. The wheel asked before it spun, and
+       the answer can have gone stale in between. */
+    var g = gateState_();
+    if (!g.unlocked) {
+      return json_({ success: true, granted: false, bottlesToNext: g.bottlesToNext });
     }
-    writeCounter_(SETTING_MAIN_AWARDED, awarded + 1);
+    writeCounter_(SETTING_MAIN_AWARDED, g.awarded + 1);
     return json_({ success: true, granted: true });
   } finally {
     lock.releaseLock();
